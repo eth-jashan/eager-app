@@ -3,14 +3,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState, useEffect } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Entypo, Feather,MaterialIcons,Ionicons  } from '@expo/vector-icons';
-import AuthScreen from '../screen/AuthFlow/AuthScreen';
+import AuthScreen from '../screen/AuthFlow/AuthScreen'
 
 const AuthStack = createStackNavigator();
 
 const MyAuth =()=> {
   return (
-    <AuthStack.Navigator initialRouteName={"StartupScreen"} screenOptions={{headerShown:false}}>
-    <AuthStack.Screen name="StartupScreen" component={AuthScreen} /> 
+    <AuthStack.Navigator  screenOptions={{headerShown:false}}>
+    <AuthStack.Screen name="Login" component={AuthScreen} /> 
     </AuthStack.Navigator>
   );
 }
@@ -86,7 +86,6 @@ const MainComp = () => {
 
 const FlowStack = createStackNavigator()
 const AppNav = () => {
-  const token = useSelector(x=>x.profile.token)
     return(
         <NavigationContainer>
             <FlowStack.Navigator screenOptions={{headerShown:false}}>

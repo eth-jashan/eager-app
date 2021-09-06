@@ -6,20 +6,10 @@ import {applyMiddleware, createStore, combineReducers} from 'redux'
 import ReduxThunk from 'redux-thunk'
 
 //importing reducer
-// import ProfileReducer from './store/reducer/profile'
-// import CategoryReducer from './store/reducer/category'
-// import DishReducer from './store/reducer/dish'
-// import OrderHandler from './store/reducer/orders';
-// import BannerHandler from './store/reducer/banner';
-// import dunzo_delivery from './store/reducer/dunzo_delivery';
+
 //-----initialising reducer---//
 const rootReducer = combineReducers({
-  // profile:ProfileReducer,
-  // catergory:CategoryReducer,
-  // dish:DishReducer,
-  // orders:OrderHandler,
-  // banner:BannerHandler,
-  // dunzo:dunzo_delivery
+  
 })
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
@@ -30,19 +20,22 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 //-----Custom Font Setup-------//
 import * as Font from 'expo-font'
 import AppLoading from "expo-app-loading"
-import AppNav from './navigator/AppNav';
+import AppNav from './source/Navigator/AppNavigator';
 
 
 
 const fontLoading = () =>{ 
   return Font.loadAsync({
-    // 'black':require('./assets/fonts/AirbnbCereal-Black.ttf'),
-    // 'bold':require('./assets/fonts/AirbnbCereal-Bold.ttf'),
-    // 'book':require('./assets/fonts/AirbnbCereal-Book.ttf'),
-    // 'extraBold':require('./assets/fonts/AirbnbCereal-ExtraBold.ttf'),
-    // 'light':require('./assets/fonts/AirbnbCereal-Light.ttf'),
-    // 'medium':require('./assets/fonts/AirbnbCereal-Medium.ttf'),
-    // 'logo': require('./assets/fonts/Cocon-Regular-Font.otf')
+    'black':require('./assets/fonts/Gilroy-Black.ttf'),
+    'bold':require('./assets/fonts/Gilroy-Bold.ttf'),
+    'extra-bold':require('./assets/fonts/Gilroy-ExtraBold.ttf'),
+    'heavy':require('./assets/fonts/Gilroy-Heavy.ttf'),
+    'light':require('./assets/fonts/Gilroy-Light.ttf'),
+    'medium':require('./assets/fonts/Gilroy-Medium.ttf'),
+    'regular': require('./assets/fonts/Gilroy-Regular.ttf'),
+    'ultra-light': require('./assets/fonts/Gilroy-UltraLight.ttf'),
+    'thin': require('./assets/fonts/Gilroy-Thin.ttf'),
+    'semi-bold': require('./assets/fonts/Gilroy-SemiBold.ttf')
 })}
 //---------------------------------------//
 
