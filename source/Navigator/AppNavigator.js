@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Entypo, Feather,MaterialIcons,Ionicons  } from '@expo/vector-icons';
 import AuthScreen from '../screen/AuthFlow/AuthScreen'
+import TopicSelectionPage from '../screen/AuthFlow/TopicSelectionScreen';
 
 const AuthStack = createStackNavigator();
 
@@ -11,6 +12,7 @@ const MyAuth =()=> {
   return (
     <AuthStack.Navigator  screenOptions={{headerShown:false}}>
     <AuthStack.Screen name="Login" component={AuthScreen} /> 
+    <AuthStack.Screen name="TopicSelection" component={TopicSelectionPage} /> 
     </AuthStack.Navigator>
   );
 }
@@ -77,7 +79,7 @@ const MainComp = () => {
 
   return(
     <MainStack.Navigator screenOptions={{headerShown:false}}>
-      
+      <MainStack.Screen name='TopicSelection' component={TopicSelectionPage}  />
     </MainStack.Navigator>
   )
 
@@ -90,6 +92,7 @@ const AppNav = () => {
         <NavigationContainer>
             <FlowStack.Navigator screenOptions={{headerShown:false}}>
             <FlowStack.Screen name='Auth' component={MyAuth}  />
+            <FlowStack.Screen name='Main' component={MainComp}  />
             </FlowStack.Navigator>
         </NavigationContainer>
     )

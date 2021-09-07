@@ -7,12 +7,13 @@ import AuthTextInput from '../../component/AuthTextInput';
 import { colors } from '../../Constants/theme';
 //icons
 import { AntDesign,Feather } from '@expo/vector-icons';
+import { imageUtils } from '../../Constants/assets';
 
 const {width, height} = Dimensions.get('window')
 
 
 
-const AuthScreen = () => {
+const AuthScreen = ({navigation}) => {
     
     const [formSelect, setFormSelect] = useState('login')
     const [username, setUsername] = useState('')
@@ -27,20 +28,19 @@ const AuthScreen = () => {
             <Image
                 resizeMode='contain'
                 style={{width:width/2, height:200, bottom:50, left:40}}
-                source={require('../../../assets/login-graphic.png')}
+                source={imageUtils.authScreenGraphics}
             />
         </View>)
     }
 
     const signUpForm = () => {
-        console.log('valueeee', username.length)
         return (
             <View style={{marginTop:18}}>
 
                 <AuthTextInput
                     value={username}
                     placeholder="username"
-                    onChange={(text)=>setUsername(text)}
+                    onChangeText={setUsername}
                     secureTextEntry={false}
                     helperText={false}
                     icon={()=><AntDesign name="user" size={24} color={colors.primary} />}
@@ -48,7 +48,7 @@ const AuthScreen = () => {
                 <View style={{marginVertical:12}} >
                     <AuthTextInput
                         value={password}
-                        onChange={(text)=>setPassword(text)}
+                        onChangeText={setPassword}
                         placeholder="password"
                         icon={()=>showpass?<Feather onPress={()=>setShowPass(!showpass)} name="eye" size={24} color={colors.primary}/>:<Feather onPress={()=>setShowPass(!showpass)} name="eye-off" size={24} color={colors.primary}/>}
                         secureTextEntry={showpass}
@@ -68,10 +68,11 @@ const AuthScreen = () => {
                 <View style={{marginBottom:12}} >
                     <AuthTextInput
                         value={rePassword}
-                        onChange={(text)=>setRePassword(text)}
+                        onChangeText={setRePassword}
                         placeholder="Re-enter Password"
-                        icon={()=>showpass?<Feather onPress={()=>setShowPass(!showpass)} name="eye" size={24} color={colors.primary}/>:<Feather onPress={()=>setShowPass(!showpass)} name="eye-off" size={24} color={colors.primary}/>}
+                        icon={()=>showpass?<Feather onPress={()=>setShowPass(!showpass)} name="eye" size={24} color={password != rePassword?'red':colors.primary}/>:<Feather onPress={()=>setShowPass(!showpass)} name="eye-off" size={24} color={colors.primary}/>}
                         secureTextEntry={showpass}
+                        onError={password != rePassword}
                     />
                 </View>
 
@@ -105,7 +106,7 @@ const AuthScreen = () => {
     const renderFooter = () => {
         return(
             <View>
-                <TouchableOpacity style={{width:width*0.8, alignSelf:'center', backgroundColor:colors.primary, padding:12}}>
+                <TouchableOpacity onPress={()=>navigation.navigate('TopicSelection')} style={{width:width*0.8, alignSelf:'center', backgroundColor:colors.primary, padding:12}}>
                     <Text style={{fontSize:16, color:'white', fontFamily:'regular', alignSelf:'center'}}>Sign In</Text>
                 </TouchableOpacity>
                 <View>
