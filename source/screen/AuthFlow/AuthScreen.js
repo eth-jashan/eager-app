@@ -61,7 +61,6 @@ const AuthScreen = ({navigation}) => {
         )
     }
     const registerForm = () => {
-        console.log('valueeee', username.length)
         return (
             <View style={{}}>
                 {signUpForm()}

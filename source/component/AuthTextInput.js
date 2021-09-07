@@ -4,7 +4,7 @@ import { colors } from '../Constants/theme'
 const {width, height} = Dimensions.get('window')
 
 const AuthTextInput = ({value, placeholder,onChangeText, icon, secureTextEntry, onError,helperText}) => {
-    console.log('type of', typeof(value), value.length)
+    
     const [showLabel, setShowLabel] = useState(false)
 
     const onFocus = () => {
@@ -12,7 +12,7 @@ const AuthTextInput = ({value, placeholder,onChangeText, icon, secureTextEntry, 
     }
 
     const onBlur = () => {
-        console.log('type of', typeof(value), value.toString().length)
+        
         if(value.length > 0){
             setShowLabel(true)
         }else{
