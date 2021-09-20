@@ -1,7 +1,6 @@
-// import { Dimensions, StyleSheet } from "react-native";
-// import { colors } from "../../../Constants/theme";
-// const {width, height} = Dimensions.get('window')
-
+import { Dimensions, StyleSheet } from "react-native";
+import { colors } from "../../../Constants/theme";
+const {width, height} = Dimensions.get('window')
 
 // export const styles = StyleSheet.create({
 //     overlayView:{
