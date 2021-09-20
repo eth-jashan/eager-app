@@ -8,13 +8,11 @@ import { colors } from '../../Constants/theme';
 //icons
 import { AntDesign,Feather } from '@expo/vector-icons';
 import { imageUtils } from '../../Constants/assets';
-
 const {width, height} = Dimensions.get('window')
 
 
-
 const AuthScreen = ({navigation}) => {
-    
+
     const [formSelect, setFormSelect] = useState('login')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -55,7 +53,7 @@ const AuthScreen = ({navigation}) => {
                         helperText={formSelect==='login'?true:false}
                     />
                 </View>
-                
+
 
             </View>
         )
@@ -129,8 +127,3 @@ const AuthScreen = ({navigation}) => {
         </SafeAreaView>
     )
 }
-
-
-
-
-export default AuthScreen
