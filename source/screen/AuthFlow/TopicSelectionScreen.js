@@ -6,10 +6,14 @@ import { colors } from '../../Constants/theme'
 import { Ionicons,AntDesign } from '@expo/vector-icons';
 import LottieView from 'lottie-react-native';
 import { lottieAnimation } from '../../Constants/assets'
+import { FlatList } from 'react-native-gesture-handler'
+import TopicCard from '../../component/TopicCard'
 
 const {width, height} = Dimensions.get('window')
 
 const TopicSelectionPage = () => {
+
+    const listOfSelection = ['Python', 'Java', 'JavaScript', 'HTML', 'CSS', 'Cloud\nComputing', 'React Native', 'React']
 
     return(
         <SafeAreaView style={{flex:1, backgroundColor:colors.secondary}} >
@@ -25,6 +29,14 @@ const TopicSelectionPage = () => {
                 autoPlay={true}
                 speed={1}
                 source={lottieAnimation.background_bubble}
+            />
+
+            <FlatList
+                data={listOfSelection}
+                keyExtractor={x=>x}
+                renderItem={({item})=>{
+                    return<TopicCard item={item} />
+                }}
             />
             
         </SafeAreaView>
