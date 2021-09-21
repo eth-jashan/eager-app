@@ -18,7 +18,7 @@ const TopicCard = ({item}) => {
         setSelected(!selected)
     }
     return(
-        <TouchableOpacity onPress={onPress} style={{width:width*0.96, padding:12, borderRadius:8,marginVertical:8, backgroundColor:selected?randomColor():'black', height:150, alignSelf:'center',opacity:0.75}}>
+        <TouchableOpacity onPress={onPress} style={{width:width*0.96, padding:12, borderRadius:8,marginVertical:8, backgroundColor:selected?'#1078FC':'black', height:150, alignSelf:'center',opacity:0.75}}>
             <Text style={{fontFamily:'medium', fontSize:18, color:'white'}}>{item}</Text>
         </TouchableOpacity>
     )
