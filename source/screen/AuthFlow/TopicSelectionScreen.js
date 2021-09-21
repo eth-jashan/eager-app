@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, Dimensions} from 'react-native'
+import {View, Text, Dimensions, Button} from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import HeaderComponent from '../../component/HeaderComponent'
 import { colors } from '../../Constants/theme'
@@ -11,7 +11,7 @@ import TopicCard from '../../component/TopicCard'
 
 const {width, height} = Dimensions.get('window')
 
-const TopicSelectionPage = () => {
+const TopicSelectionPage = (props) => {
 
     const listOfSelection = ['Python', 'Java', 'JavaScript', 'HTML', 'CSS', 'Cloud\nComputing', 'React Native', 'React']
 
@@ -38,6 +38,9 @@ const TopicSelectionPage = () => {
                     return<TopicCard item={item} />
                 }}
             />
+            <Button title = 'Floating Button' onPress={()=>{props.navigation.navigate('Main')}}/>
+
+            
             
         </SafeAreaView>
     )

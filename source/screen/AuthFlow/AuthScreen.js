@@ -127,3 +127,5 @@ const AuthScreen = ({navigation}) => {
         </SafeAreaView>
     )
 }
+
+export default AuthScreen;
