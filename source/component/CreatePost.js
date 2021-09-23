@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, Dimensions,TextInput } from "react-native";
+import { View, Text, Dimensions,TextInput,TouchableOpacity,Button } from "react-native";
 import { colors } from "../Constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CreatePostStyles from "./Styles/CreatePostStyles";
+import Tags from "react-native-tags";
+import { ScrollView, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import ResourceLink from "./ResourceLink";
 
 
 const { width, height } = Dimensions.get("window");
@@ -19,87 +22,107 @@ const CreatePost = () => {
     const [linkeBorder, setLinkeBorder] = useState("black");
     const [tagBorder, setTagBorder] = useState("black");
 
+    const[tagArray,setTagArray] = useState([]);
+
+        const randomColor = () => {
+        var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+        if(randomColor === '#000000'){
+            randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+        }
+        return randomColor
+    }
+
 
   return (
-    <SafeAreaView style={{height:height}}>
+    <SafeAreaView style={{ height: height }}>
       <View style={{ alignItems: "center" }}>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontFamily: "medium",
-            marginVertical: 10,
-          }}
-        >
-          New Post
-        </Text>
+        <Text style={CreatePostStyles.heading}>New Post</Text>
       </View>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <TextInput
-          onFocus={() => setTitleBorder(colors.primary)}
-          onBlur={() => {
-            setTitleBorder("black");
+        <View>
+          <Text style={CreatePostStyles.label}>Title</Text>
+          <TextInput
+            onFocus={() => setTitleBorder(colors.tertiary)}
+            onBlur={() => {
+              setTitleBorder("black");
+            }}
+            value={title}
+            keyboardType="default"
+            onChangeText={setTitle}
+            style={{
+              ...CreatePostStyles.textInput,
+              borderWidth: 1,
+              borderColor: titleBorder,
+            }}
+          />
+        </View>
+        <View>
+          <Text style={CreatePostStyles.label}>Description</Text>
+          <TextInput
+            onFocus={() => setDesBorder(colors.tertiary)}
+            onBlur={() => {
+              setDesBorder("black");
+            }}
+            value={description}
+            keyboardType="default"
+            onChangeText={setDescription}
+            multiline={true}
+            numberOfLines={10}
+            style={{
+              ...CreatePostStyles.descriptionTextInput,
+              borderWidth: 1,
+              borderColor: desBorder,
+            }}
+          />
+        </View>
+        <View>
+          <Text style={CreatePostStyles.label}>Link</Text>
+          <ResourceLink />
+          <TextInput
+            onFocus={() => setLinkeBorder(colors.tertiaryDark)}
+            onBlur={() => {
+              setLinkeBorder("black");
+            }}
+            value={link}
+            keyboardType="default"
+            onChangeText={setLink}
+            style={{
+              ...CreatePostStyles.textInput,
+              borderWidth: 1,
+              borderColor: linkeBorder,
+            }}
+          />
+
+          <View style={{ justifyContent: "flex-end", alignItems: "flex-end" }}>
+            <TouchableOpacity style={CreatePostStyles.addLink}>
+              <Text style={{ color: colors.tertiaryLight }}>Add Link</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{ width: width * 0.89 }}>
+          <Text style={CreatePostStyles.label}>Tags</Text>
+        </View>
+
+        <Tags
+          maxNumberOfTags={10}
+          onChangeTags={(tags) => {
+            setTagArray([...tagArray, tags]);
           }}
-          value={title}
-          keyboardType="default"
-          onChangeText={setTitle}
-          placeholder="Title"
-          placeholderTextColor="#FFF"
-          style={{
-            ...CreatePostStyles.textInput,
-            borderWidth: 1,
-            borderColor: titleBorder,
+          onTagPress={(index, tagLabel, event, deleted) => console.log(index)}
+          containerStyle={{
+            justifyContent: "center",
+            width: width * 0.9,
           }}
-        />
-        <TextInput
-          onFocus={() => setDesBorder(colors.primary)}
-          onBlur={() => {
-            setDesBorder("black");
-          }}
-          value={description}
-          keyboardType="default"
-          onChangeText={setDescription}
-          placeholder="Description"
-          placeholderTextColor="#FFF"
-          multiline={true}
-          numberOfLines={10}
-          style={{
-            ...CreatePostStyles.descriptionTextInput,
-            borderWidth: 1,
-            borderColor: desBorder,
-          }}
-        />
-        <TextInput
-          onFocus={() => setLinkeBorder(colors.primary)}
-          onBlur={() => {
-            setLinkeBorder("black");
-          }}
-          value={link}
-          keyboardType="default"
-          onChangeText={setLink}
-          placeholder="Link"
-          placeholderTextColor="#FFF"
-          style={{
-            ...CreatePostStyles.textInput,
-            borderWidth: 1,
-            borderColor: linkeBorder,
-          }}
-        />
-        <TextInput
-          onFocus={() => setTagBorder(colors.primary)}
-          onBlur={() => {
-            setTagBorder("black");
-          }}
-          value={tags}
-          keyboardType="default"
-          onChangeText={setTags}
-          placeholder="Tags"
-          placeholderTextColor="#FFF"
-          style={{
-            ...CreatePostStyles.textInput,
-            borderWidth: 1,
-            borderColor: tagBorder,
-          }}
+          inputStyle={CreatePostStyles.tagInput}
+          renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+            <TouchableOpacity
+              style={CreatePostStyles.tag}
+              key={`${tag}-${index}`}
+              onPress={onPress}
+            >
+              <Text style={{ fontSize: 15, color: "#FFF" }}>{tag}</Text>
+            </TouchableOpacity>
+          )}
         />
       </View>
     </SafeAreaView>

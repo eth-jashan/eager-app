@@ -23,6 +23,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-modalize": "^2.0.8",
     "react-native-paper": "^4.9.2",
+    "react-native-tags": "^2.2.0",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.5",

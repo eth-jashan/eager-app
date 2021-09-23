@@ -38,23 +38,21 @@ const HomeScreen = () => {
   ];
 
   return (
-
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
-        <View></View>
-        <FloatingAction
-          actions={actions}
-          onPressItem={(name) => onOptions(name)}
-        />
-        <Modalize
-          modalStyle={{ backgroundColor: colors.navBarBackground }}
-          adjustToContentHeight={true}
-          ref={modalizeRef}
-          handlePosition={"inside"}
-        >
-          <CreatePost />
-        </Modalize>
-      </SafeAreaView>
-
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
+      <View></View>
+      <FloatingAction
+        actions={actions}
+        onPressItem={(name) => onOptions(name)}
+      />
+      <Modalize
+        modalStyle={{ backgroundColor: colors.modal }}
+        modalHeight={height * 0.9}
+        ref={modalizeRef}
+        handlePosition={"inside"}
+      >
+        <CreatePost />
+      </Modalize>
+    </SafeAreaView>
   );
 };
 
