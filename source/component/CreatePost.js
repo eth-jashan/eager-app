@@ -34,7 +34,7 @@ const CreatePost = () => {
 
 
   return (
-    <SafeAreaView style={{ height: height }}>
+    <SafeAreaView>
       <View style={{ alignItems: "center" }}>
         <Text style={CreatePostStyles.heading}>New Post</Text>
       </View>
