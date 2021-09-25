@@ -59,6 +59,7 @@ export const CreatePostStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
+    width:90
   },
 });
 

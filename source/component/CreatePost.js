@@ -1,37 +1,80 @@
-import React, { useState } from "react";
-import { View, Text, Dimensions,TextInput,TouchableOpacity,Button } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  View,
+  Text,
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  Button,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { colors } from "../Constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CreatePostStyles from "./Styles/CreatePostStyles";
 import Tags from "react-native-tags";
-import { ScrollView, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  ScrollView,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import ResourceLink from "./ResourceLink";
-
+import LinkPreview from "react-native-link-preview";
 
 const { width, height } = Dimensions.get("window");
 
 const CreatePost = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
+  const [link, setLink] = useState("");
+  const [resourceArray, setResourceArray] = useState([]);
 
-    const[title,setTitle] = useState('');
-    const [description, setDescription] = useState("");
-    const [tags, setTags] = useState("");
-    const [link, setLink] = useState("");
+  const [titleBorder, setTitleBorder] = useState("black");
+  const [desBorder, setDesBorder] = useState("black");
+  const [linkeBorder, setLinkeBorder] = useState("black");
+  const [tagBorder, setTagBorder] = useState("black");
 
-    const[titleBorder,setTitleBorder] = useState('black')
-    const [desBorder, setDesBorder] = useState("black");
-    const [linkeBorder, setLinkeBorder] = useState("black");
-    const [tagBorder, setTagBorder] = useState("black");
+  const [linkLoader, setLinkLoader] = useState(false);
 
-    const[tagArray,setTagArray] = useState([]);
+  const [tagArray, setTagArray] = useState([]);
 
-        const randomColor = () => {
-        var randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-        if(randomColor === '#000000'){
-            randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-        }
-        return randomColor
-    }
+  const uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  };
 
+  const removeItem = (id) => {
+   // console.log(id)
+   // console.log(resourceArray)
+    // resourceArray.forEach(x => console.log(x.title))
+    setResourceArray(resourceArray.filter((x) => x.id !== id)); 
+  }
+
+  const meta = async (link) => {
+    setLinkLoader(true);
+    const metaData = await LinkPreview.getPreview(link);
+
+ //   console.log(metaData);
+    const resourceDetails = {
+      id:uuidv4(),
+      title: metaData.title,
+      description: metaData.description,
+      image: metaData.favicons[0],
+      url: metaData.url,
+    };
+    setResourceArray([...resourceArray, resourceDetails]);
+  //  console.log(resourceArray);
+    setLink("");
+    setLinkLoader(false);
+  };
+
+  const renderItem = (item,index) => <ResourceLink key={index} onPress = {(id)=>removeItem(id)} data={item} />;
 
   return (
     <SafeAreaView>
@@ -77,7 +120,18 @@ const CreatePost = () => {
         </View>
         <View>
           <Text style={CreatePostStyles.label}>Link</Text>
-          <ResourceLink />
+
+          <View>
+            {resourceArray.map((item,index) => renderItem(item,index))}
+            {/* <FlatList
+            scrollEnabled={true}
+              style={{ flex: 1 }}
+              horizontal={false}
+              data={resourceArray}
+              renderItem={renderItem}
+            /> */}
+          </View>
+
           <TextInput
             onFocus={() => setLinkeBorder(colors.tertiaryDark)}
             onBlur={() => {
@@ -94,8 +148,17 @@ const CreatePost = () => {
           />
 
           <View style={{ justifyContent: "flex-end", alignItems: "flex-end" }}>
-            <TouchableOpacity style={CreatePostStyles.addLink}>
-              <Text style={{ color: colors.tertiaryLight }}>Add Link</Text>
+            <TouchableOpacity
+              style={CreatePostStyles.addLink}
+              onPress={() => {
+                meta(link);
+              }}
+            >
+              {linkLoader ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text style={{ color: colors.tertiaryLight }}>Add Link</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
