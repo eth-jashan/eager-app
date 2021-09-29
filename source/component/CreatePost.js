@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { Platform,StyleSheet } from "react-native";
 import {
   View,
   Text,
@@ -19,8 +20,20 @@ import {
 } from "react-native-gesture-handler";
 import ResourceLink from "./ResourceLink";
 import LinkPreview from "react-native-link-preview";
+import {  Feather } from "@expo/vector-icons";
+
+
+import { MarkdownView } from "react-native-markdown-view";
+
 
 const { width, height } = Dimensions.get("window");
+
+const copy = `# h1 Heading 8-)
+ 
+**This is some bold text!**
+ 
+This is normal text
+`;
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -28,6 +41,7 @@ const CreatePost = () => {
   const [tags, setTags] = useState("");
   const [link, setLink] = useState("");
   const [resourceArray, setResourceArray] = useState([]);
+  const[isPreview,setIsPreview] = useState(false);
 
   const [titleBorder, setTitleBorder] = useState("black");
   const [desBorder, setDesBorder] = useState("black");
@@ -100,36 +114,64 @@ const CreatePost = () => {
           />
         </View>
         <View>
-          <Text style={CreatePostStyles.label}>Description</Text>
-          <TextInput
-            onFocus={() => setDesBorder(colors.tertiary)}
-            onBlur={() => {
-              setDesBorder("black");
-            }}
-            value={description}
-            keyboardType="default"
-            onChangeText={setDescription}
-            multiline={true}
-            numberOfLines={10}
+          <View
             style={{
-              ...CreatePostStyles.descriptionTextInput,
-              borderWidth: 1,
-              borderColor: desBorder,
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
             }}
-          />
+          >
+            <Text style={CreatePostStyles.label}>
+              {isPreview ? "Preview" : "Description"}
+            </Text>
+
+            <TouchableOpacity
+              style={{ ...CreatePostStyles.addLink, padding: 5 }}
+              onPress={() => {
+                setIsPreview((prev) => !prev);
+              }}
+            >
+              {isPreview ? (
+                <Feather name="eye" size={18} color="#ffffff" />
+              ) : (
+                <Feather name="eye-off" size={18} color="#ffffff" />
+              )}
+            </TouchableOpacity>
+          </View>
+          {!isPreview ? (
+            <TextInput
+              onFocus={() => setDesBorder(colors.tertiary)}
+              onBlur={() => {
+                setDesBorder("black");
+              }}
+              value={description}
+              keyboardType="default"
+              onChangeText={setDescription}
+              multiline={true}
+              numberOfLines={10}
+              style={{
+                ...CreatePostStyles.descriptionTextInput,
+                borderWidth: 1,
+                borderColor: desBorder,
+              }}
+            />
+          ) : (
+            <View
+              style={{
+                ...CreatePostStyles.preview,
+                borderWidth: 1,
+                borderColor: desBorder,
+              }}
+            >
+              <MarkdownView>{description}</MarkdownView>
+            </View>
+          )}
         </View>
         <View>
           <Text style={CreatePostStyles.label}>Link</Text>
 
           <View>
-            {resourceArray.map((item,index) => renderItem(item,index))}
-            {/* <FlatList
-            scrollEnabled={true}
-              style={{ flex: 1 }}
-              horizontal={false}
-              data={resourceArray}
-              renderItem={renderItem}
-            /> */}
+            {resourceArray.map((item, index) => renderItem(item, index))}
           </View>
 
           <TextInput
@@ -191,5 +233,7 @@ const CreatePost = () => {
     </SafeAreaView>
   );
 };
+
+ 
 
 export default CreatePost;

@@ -59,7 +59,13 @@ export const CreatePostStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
-    width:90
+    width: 90,
+  },
+  preview: {
+    backgroundColor: colors.secondaryLight,
+    borderRadius: 6,
+    padding: 12,
+    width: width * 0.9,
   },
 });
 

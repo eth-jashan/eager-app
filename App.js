@@ -26,17 +26,18 @@ import AppNav from './source/Navigator/AppNavigator';
 
 const fontLoading = () =>{ 
   return Font.loadAsync({
-    'black':require('./assets/fonts/Gilroy-Black.ttf'),
-    'bold':require('./assets/fonts/Gilroy-Bold.ttf'),
-    'extra-bold':require('./assets/fonts/Gilroy-ExtraBold.ttf'),
-    'heavy':require('./assets/fonts/Gilroy-Heavy.ttf'),
-    'light':require('./assets/fonts/Gilroy-Light.ttf'),
-    'medium':require('./assets/fonts/Gilroy-Medium.ttf'),
-    'regular': require('./assets/fonts/Gilroy-Regular.ttf'),
-    'ultra-light': require('./assets/fonts/Gilroy-UltraLight.ttf'),
-    'thin': require('./assets/fonts/Gilroy-Thin.ttf'),
-    'semi-bold': require('./assets/fonts/Gilroy-SemiBold.ttf')
-})}
+    black: require("./assets/fonts/Gilroy-Black.ttf"),
+    bold: require("./assets/fonts/Gilroy-Bold.ttf"),
+    "extra-bold": require("./assets/fonts/Gilroy-ExtraBold.ttf"),
+    heavy: require("./assets/fonts/Gilroy-Heavy.ttf"),
+    light: require("./assets/fonts/Gilroy-Light.ttf"),
+    medium: require("./assets/fonts/Gilroy-Medium.ttf"),
+    regular: require("./assets/fonts/Gilroy-Regular.ttf"),
+    "ultra-light": require("./assets/fonts/Gilroy-UltraLight.ttf"),
+    thin: require("./assets/fonts/Gilroy-Thin.ttf"),
+    "semi-bold": require("./assets/fonts/Gilroy-SemiBold.ttf"),
+    'console': require("./assets/fonts/FiraCode-Medium.otf"),
+  });}
 //---------------------------------------//
 
 
