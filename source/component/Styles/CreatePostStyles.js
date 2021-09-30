@@ -67,6 +67,57 @@ export const CreatePostStyles = StyleSheet.create({
     padding: 12,
     width: width * 0.9,
   },
+  helpContainer: {
+    backgroundColor: colors.modal,
+    padding: 10,
+    height: height * 0.75,
+    margin: 10,
+    borderRadius: 6,
+    elevation: 10,
+  },
+  helpSubContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headingUnderline: {
+    height: 3,
+    backgroundColor: "#ffffff",
+    width: width * 0.45,
+  },
+  helpScrollView: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  blockElement: {
+    padding: 15,
+    borderTopWidth: 0.5,
+    width: width * 0.5,
+    borderRightWidth: 1,
+    borderColor: colors.modal,
+    backgroundColor: colors.octa,
+  },
+  helpHeadingBlock: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    width: width * 0.5,
+    borderColor: colors.modal,
+    backgroundColor: colors.octa,
+  },
+  helpHeading: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  helpElementText: {
+    fontSize: 12,
+    color: colors.secondaryBlack,
+    fontFamily: "console",
+  },
+  helpSyntaxText: {
+    fontSize: 12,
+    fontFamily: "console",
+    color: colors.secondaryBlack,
+  },
 });
 
 

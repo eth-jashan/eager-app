@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { Platform,StyleSheet } from "react-native";
 import {
   View,
   Text,
@@ -20,20 +19,12 @@ import {
 } from "react-native-gesture-handler";
 import ResourceLink from "./ResourceLink";
 import LinkPreview from "react-native-link-preview";
-import {  Feather } from "@expo/vector-icons";
-
+import { Feather, Ionicons, Entypo } from "@expo/vector-icons";
 
 import { MarkdownView } from "react-native-markdown-view";
-
+import { Modal } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
-
-const copy = `# h1 Heading 8-)
- 
-**This is some bold text!**
- 
-This is normal text
-`;
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -41,7 +32,8 @@ const CreatePost = () => {
   const [tags, setTags] = useState("");
   const [link, setLink] = useState("");
   const [resourceArray, setResourceArray] = useState([]);
-  const[isPreview,setIsPreview] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isHelp, setIsHelp] = useState(false);
 
   const [titleBorder, setTitleBorder] = useState("black");
   const [desBorder, setDesBorder] = useState("black");
@@ -51,6 +43,23 @@ const CreatePost = () => {
   const [linkLoader, setLinkLoader] = useState(false);
 
   const [tagArray, setTagArray] = useState([]);
+
+  const markdownHelp = [
+    { element: "Heading", syntax: "# H1\n## H2\n### H3" },
+    { element: "Code Block", syntax: "``` \n code \n\n ```" },
+    { element: "Inline Code", syntax: "`code`" },
+    {
+      element: "Ordered List",
+      syntax: "1. First item\n2. Second item\n3. Third item",
+    },
+    {
+      element: "Unordered List",
+      syntax: "- First item\n- Second item\n- Third item",
+    },
+    { element: "Horizontal Rule", syntax: "---" },
+    { element: "Bold", syntax: "**bold text**" },
+    { element: "Italics", syntax: "*italic text*" },
+  ];
 
   const uuidv4 = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -64,35 +73,63 @@ const CreatePost = () => {
   };
 
   const removeItem = (id) => {
-   // console.log(id)
-   // console.log(resourceArray)
+    // console.log(id)
+    // console.log(resourceArray)
     // resourceArray.forEach(x => console.log(x.title))
-    setResourceArray(resourceArray.filter((x) => x.id !== id)); 
-  }
+    setResourceArray(resourceArray.filter((x) => x.id !== id));
+  };
 
   const meta = async (link) => {
     setLinkLoader(true);
     const metaData = await LinkPreview.getPreview(link);
+    console.log(metaData);
 
- //   console.log(metaData);
+    //   console.log(metaData);
     const resourceDetails = {
-      id:uuidv4(),
+      id: uuidv4(),
       title: metaData.title,
       description: metaData.description,
       image: metaData.favicons[0],
       url: metaData.url,
     };
     setResourceArray([...resourceArray, resourceDetails]);
-  //  console.log(resourceArray);
+    //  console.log(resourceArray);
     setLink("");
     setLinkLoader(false);
   };
 
-  const renderItem = (item,index) => <ResourceLink key={index} onPress = {(id)=>removeItem(id)} data={item} />;
+  const renderItem = (item, index) => (
+    <ResourceLink key={index} onPress={(id) => removeItem(id)} data={item} />
+  );
+
+  const renderHelp = (item, index) => (
+    <View key={index} style={CreatePostStyles.helpScrollView}>
+      <View style={CreatePostStyles.blockElement}>
+        <Text style={CreatePostStyles.helpElementText}>{item.element}</Text>
+      </View>
+      <View style={CreatePostStyles.blockElement}>
+        <Text style={CreatePostStyles.helpSyntaxText}>{item.syntax}</Text>
+      </View>
+    </View>
+  );
 
   return (
     <SafeAreaView>
       <View style={{ alignItems: "center" }}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: colors.tertiaryLight,
+            borderRadius: 6,
+            alignItems: "center",
+            alignSelf: "flex-end",
+            marginHorizontal: 10,
+          }}
+          onPress={() => {
+            setIsHelp((prev) => !prev);
+          }}
+        >
+          <Ionicons name="help" size={18} color="#000000" />
+        </TouchableOpacity>
         <Text style={CreatePostStyles.heading}>New Post</Text>
       </View>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
@@ -146,6 +183,7 @@ const CreatePost = () => {
               }}
               value={description}
               keyboardType="default"
+            
               onChangeText={setDescription}
               multiline={true}
               numberOfLines={10}
@@ -230,10 +268,35 @@ const CreatePost = () => {
           )}
         />
       </View>
+      <Modal visible={isHelp} style={CreatePostStyles.helpContainer}>
+        <View style={CreatePostStyles.helpSubContainer}>
+          <Entypo
+            onPress={() => {
+              setIsHelp((help) => !help);
+            }}
+            style={{ justifyContent: "center", alignSelf: "flex-end"}}
+            name="cross"
+            size={22}
+            color="white"
+          />
+          <Text style={CreatePostStyles.heading}>MarkDown Guide</Text>
+
+          <View style={CreatePostStyles.headingUnderline}></View>
+          <ScrollView style={{ height: height * 0.6, marginTop: 7 }}>
+            <View style={CreatePostStyles.helpScrollView}>
+              <View style={CreatePostStyles.helpHeadingBlock}>
+                <Text style={CreatePostStyles.helpHeading}>Element</Text>
+              </View>
+              <View style={CreatePostStyles.helpHeadingBlock}>
+                <Text style={CreatePostStyles.helpHeading}>Syntax</Text>
+              </View>
+            </View>
+            {markdownHelp.map((item, index) => renderHelp(item, index))}
+          </ScrollView>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
-
- 
 
 export default CreatePost;
