@@ -44,13 +44,14 @@ export const CreatePostStyles = StyleSheet.create({
     color: "#FFF",
   },
   tag: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.tags,
     borderRadius: 8,
-    paddingVertical: 3,
+    paddingVertical: 5,
     paddingHorizontal: 7,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 5,
+    flexDirection:'row'
   },
   addLink: {
     backgroundColor: colors.primary,
@@ -117,6 +118,14 @@ export const CreatePostStyles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "console",
     color: colors.secondaryBlack,
+  },
+  DropDownContainer: {
+    alignItems: "center",
+    marginTop:15,
+    marginHorizontal:11,
+    justifyContent: "center",
+    alignSelf: "center",
+
   },
 });
 

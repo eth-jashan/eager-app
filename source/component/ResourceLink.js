@@ -26,7 +26,7 @@ const ResourceLink = ({data,onPress}) => {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={{alignItems:"flex-end"}} onPress={() => onPress(data.id)}>
-          <Entypo name="cross" size={20} color="white" />
+          <Entypo name="cross" size={13} color="white" />
         </TouchableOpacity>
         <View style={styles.linkBackground}>
           <View style={styles.imageContainer}>
