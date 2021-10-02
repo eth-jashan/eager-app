@@ -30,8 +30,8 @@ const BottomStack = () => {
     return (
       <Tab.Navigator
         initialRouteName="Home"
-        activeColor={colors.primary}
-        barStyle={{ backgroundColor: colors.navBarBackground }}
+        activeColor={colors.primaryLight}
+        barStyle={{ backgroundColor: colors.secondaryBlack}}
         shifting={true}
         screenOptions={{ headerShown: false }}
       >
