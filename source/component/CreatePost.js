@@ -28,13 +28,13 @@ import { Feather, Ionicons, Entypo } from "@expo/vector-icons";
 import { MarkdownView } from "react-native-markdown-view";
 import { Modal } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
+import ImageTaker from "./ImageTaker";
 
 const { width, height } = Dimensions.get("window");
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState("");
   const [link, setLink] = useState("");
   const [resourceArray, setResourceArray] = useState([]);
   const [isPreview, setIsPreview] = useState(false);
@@ -43,7 +43,6 @@ const CreatePost = () => {
   const [titleBorder, setTitleBorder] = useState("black");
   const [desBorder, setDesBorder] = useState("black");
   const [linkeBorder, setLinkeBorder] = useState("black");
-  const [tagBorder, setTagBorder] = useState("black");
 
   const [linkLoader, setLinkLoader] = useState(false);
 
@@ -53,16 +52,20 @@ const CreatePost = () => {
   const [postType, setPostType] = useState();
   const [postTypeArray, setPostTypeArray] = useState([]);
 
-  const[userTags,setUserTags] = useState()
+  const[image,setImage] = useState('')
 
-  const[isError,setIsError] = useState(false);
+
+  const onImageTaken = (value) => {
+    console.log(value)
+    setImage(value);
+  }
 
   const submitForm = () => {
     if (
       postTypeArray.length !== 0 &&
       category.trim().length > 0 &&
       title.trim().length > 0 &&
-      description.trim().length > 0
+      description.trim().length > 0 
     ) {
       const usertags = postTypeArray.concat(tagArray);
       const UserTags = usertags.filter(x => x !== '')
@@ -72,7 +75,8 @@ const CreatePost = () => {
         description:description,
         link:link,
         tags:UserTags,
-        category:category
+        category:category,
+        image:image
       }
 
       console.log(post);
@@ -532,11 +536,24 @@ const CreatePost = () => {
           }}
         />
       </View>
+      <ImageTaker onImageTaken={onImageTaken} />
       <TouchableOpacity
-        style={{ ...CreatePostStyles.addLink, padding: 10,width:width*0.3,alignSelf:'center',marginVertical:10,elevation:10,backgroundColor:colors.modal,borderColor:colors.primaryLight,borderWidth:1 }}
+        style={{
+          ...CreatePostStyles.addLink,
+          padding: 10,
+          width: width * 0.3,
+          alignSelf: "center",
+          marginVertical: 10,
+          elevation: 10,
+          backgroundColor: colors.modal,
+          borderColor: colors.primaryLight,
+          borderWidth: 1,
+        }}
         onPress={submitForm}
       >
-        <Text style={{ color: colors.primaryLight,fontWeight:'bold' }}>Create Post</Text>
+        <Text style={{ color: colors.primaryLight, fontWeight: "bold" }}>
+          Create Post
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
