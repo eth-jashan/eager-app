@@ -14,5 +14,16 @@ export const colors = {
   trasparentSecondaryBlack: "rgba(31, 41, 51,0.5)",
   link: "#73b6d9",
   octa: "#a9b8c7",
+<<<<<<< HEAD
+  tags: "#dfdfdf",
+  octaSecondry: "#0ebcc9",
+}; 
+
+export const imageDimensions = {
+  height:200,
+  width:300
+}
+=======
   tags:'#dfdfdf'
 }; 
+>>>>>>> prod-base
