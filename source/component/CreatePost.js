@@ -28,20 +28,13 @@ import { Feather, Ionicons, Entypo } from "@expo/vector-icons";
 import { MarkdownView } from "react-native-markdown-view";
 import { Modal } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
-<<<<<<< HEAD
 import ImageTaker from "./ImageTaker";
-=======
->>>>>>> prod-base
 
 const { width, height } = Dimensions.get("window");
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-<<<<<<< HEAD
-=======
-  const [tags, setTags] = useState("");
->>>>>>> prod-base
   const [link, setLink] = useState("");
   const [resourceArray, setResourceArray] = useState([]);
   const [isPreview, setIsPreview] = useState(false);
@@ -50,10 +43,6 @@ const CreatePost = () => {
   const [titleBorder, setTitleBorder] = useState("black");
   const [desBorder, setDesBorder] = useState("black");
   const [linkeBorder, setLinkeBorder] = useState("black");
-<<<<<<< HEAD
-=======
-  const [tagBorder, setTagBorder] = useState("black");
->>>>>>> prod-base
 
   const [linkLoader, setLinkLoader] = useState(false);
 
@@ -63,7 +52,6 @@ const CreatePost = () => {
   const [postType, setPostType] = useState();
   const [postTypeArray, setPostTypeArray] = useState([]);
 
-<<<<<<< HEAD
   const[image,setImage] = useState('')
 
 
@@ -71,22 +59,13 @@ const CreatePost = () => {
     console.log(value)
     setImage(value);
   }
-=======
-  const[userTags,setUserTags] = useState()
-
-  const[isError,setIsError] = useState(false);
->>>>>>> prod-base
 
   const submitForm = () => {
     if (
       postTypeArray.length !== 0 &&
       category.trim().length > 0 &&
       title.trim().length > 0 &&
-<<<<<<< HEAD
       description.trim().length > 0 
-=======
-      description.trim().length > 0
->>>>>>> prod-base
     ) {
       const usertags = postTypeArray.concat(tagArray);
       const UserTags = usertags.filter(x => x !== '')
@@ -96,12 +75,8 @@ const CreatePost = () => {
         description:description,
         link:link,
         tags:UserTags,
-<<<<<<< HEAD
         category:category,
         image:image
-=======
-        category:category
->>>>>>> prod-base
       }
 
       console.log(post);
@@ -561,7 +536,6 @@ const CreatePost = () => {
           }}
         />
       </View>
-<<<<<<< HEAD
       <ImageTaker onImageTaken={onImageTaken} />
       <TouchableOpacity
         style={{
@@ -580,13 +554,6 @@ const CreatePost = () => {
         <Text style={{ color: colors.primaryLight, fontWeight: "bold" }}>
           Create Post
         </Text>
-=======
-      <TouchableOpacity
-        style={{ ...CreatePostStyles.addLink, padding: 10,width:width*0.3,alignSelf:'center',marginVertical:10,elevation:10,backgroundColor:colors.modal,borderColor:colors.primaryLight,borderWidth:1 }}
-        onPress={submitForm}
-      >
-        <Text style={{ color: colors.primaryLight,fontWeight:'bold' }}>Create Post</Text>
->>>>>>> prod-base
       </TouchableOpacity>
     </SafeAreaView>
   );
