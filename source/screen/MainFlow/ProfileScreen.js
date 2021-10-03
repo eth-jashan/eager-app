@@ -19,9 +19,9 @@ const ProfileScreen = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
       <ScrollView>
         <HeaderComponent
-          headerStyles={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: colors.black, height: 80, paddingHorizontal: 12 }}
-          title='User_Name'
-          titleStyle={{ color: colors.white, fontFamily: 'regular', justifyContent: 'center', alignSelf: 'center', fontSize: 24 }}
+          headerStyles={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: colors.black, height: 60, paddingHorizontal: 12 }}
+          title='arjun@gmail.com'
+          titleStyle={{ color: colors.white, fontFamily: 'regular', justifyContent: 'center', alignSelf: 'center', fontSize: 18 }}
         />
         <View style={styles.details}>
           <View style={styles.imageContainer}>
@@ -59,7 +59,7 @@ const ProfileScreen = () => {
               onPress={() => setSelect('posts')}
               style={{ borderBottomWidth: 1, borderBottomColor: select === 'posts' ? colors.primary : colors.white, padding: 20 }}
             >
-              <Ionicons style={{ alignSelf: 'center' }} name="list" size={30}
+              <Ionicons style={{ alignSelf: 'center' }} name="list" size={24}
                 color={select === 'posts' ? colors.primary : colors.white}
               />
             </TouchableOpacity>
@@ -68,7 +68,7 @@ const ProfileScreen = () => {
               onPress={() => setSelect('favorites')}
               style={{ borderBottomWidth: 1, borderBottomColor: select === 'favorites' ? colors.primary : colors.white, padding: 20 }}
             >
-              <Fontisto style={{ alignSelf: 'center' }} name="favorite" size={30}
+              <Fontisto style={{ alignSelf: 'center' }} name="favorite" size={24}
                 color={select === 'favorites' ? colors.primary : colors.white}
               />
             </TouchableOpacity>
@@ -111,15 +111,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 30,
-    width: '80%',
+    borderRadius: 6,
+    width: '60%',
     alignSelf: 'center',
     marginBottom: 20
   },
   buttonText: {
     fontFamily: 'regular',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
     color: 'white'
   },
   details: {
