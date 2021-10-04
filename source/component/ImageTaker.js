@@ -28,14 +28,13 @@ const ImageTaker = (props) => {
   };
 
   const fileHandler = async () => {
-    setError("");
     const permission = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (!permission) {
       return;
     }
     const imgFile = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      allowsMultipleSelection: true,
+      allowsMultipleSelection: false,
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       aspect: [3, 2]
@@ -45,12 +44,15 @@ const ImageTaker = (props) => {
     const fileSize = await checkFileSize(imgFile.uri);
     console.log("file size : ", fileSize.size);
     if (fileSize.size <= 3000000) {
+      setError('');
       setImage(imgFile.uri);
       setImageDimensions(imgFile.height)
+      props.onImageTaken(imgFile,fileSize.size);
     } else {
       setError("Image Size should be equal or less than 3MB");
+      props.onImageTaken('',fileSize.size);
     }
-    props.onImageTaken(imgFile.uri);
+    
   };
 
   //FUTURE REFERENCE
@@ -154,7 +156,7 @@ const ImageTaker = (props) => {
         {error.trim().length === 0 ? (
           image.trim().length > 0 ? (
             <Image
-              style={{ height: 200 , width: 330,alignSelf:'center' }}
+              style={{ height: 200, width: 330, alignSelf: "center" }}
               resizeMode={"cover"}
               source={{
                 uri: image,
@@ -184,7 +186,9 @@ const ImageTaker = (props) => {
               color: error.trim().length === 0 ? colors.octaSecondry : "red",
             }}
           >
-            {error.trim().length === 0 ? "Upload Image" : error}
+            {error.trim().length === 0
+              ? "Upload Image"
+              : "Image Size should be equal or less than 3MB"}
           </Text>
         ) : null}
       </TouchableOpacity>
