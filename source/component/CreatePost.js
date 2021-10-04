@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from "react";
 
-import { AntDesign, FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import {
+  AntDesign,
+  FontAwesome5,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -23,16 +28,24 @@ import {
 } from "react-native-gesture-handler";
 import ResourceLink from "./ResourceLink";
 import LinkPreview from "react-native-link-preview";
-import { Feather, Ionicons, Entypo } from "@expo/vector-icons";
+import { Feather, Ionicons, Entypo, Foundation } from "@expo/vector-icons";
 
 import { MarkdownView } from "react-native-markdown-view";
 import { Modal } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
 import ImageTaker from "./ImageTaker";
 
+//actions
+import * as postCreation from "../../store/actions/postCreation";
+import { useDispatch } from "react-redux";
+
 const { width, height } = Dimensions.get("window");
 
 const CreatePost = () => {
+  const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
@@ -46,59 +59,64 @@ const CreatePost = () => {
 
   const [linkLoader, setLinkLoader] = useState(false);
 
-  const [tagArray, setTagArray] = useState('');
+  const [tagArray, setTagArray] = useState("");
 
   const [showDropDown, setShowDropDown] = useState(false);
   const [postType, setPostType] = useState();
   const [postTypeArray, setPostTypeArray] = useState([]);
 
-  const[image,setImage] = useState('')
+  const [image, setImage] = useState([]);
 
+  const onImageTaken = (value, size) => {
+    setImage([value, size]);
+    console.log(image);
+  };
 
-  const onImageTaken = (value) => {
-    console.log(value)
-    setImage(value);
+  //move this function to homeScreen
+  const getAllPostt = async() => {
+    await dispatch(postCreation.getAllPost())
   }
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (
       postTypeArray.length !== 0 &&
       category.trim().length > 0 &&
       title.trim().length > 0 &&
-      description.trim().length > 0 
+      description.trim().length > 0
     ) {
       const usertags = postTypeArray.concat(tagArray);
-      const UserTags = usertags.filter(x => x !== '')
+      const UserTags = usertags.filter((x) => x !== "");
 
       const post = {
-        title:title,
-        description:description,
-        link:link,
-        tags:UserTags,
-        category:category,
-        image:image
-      }
+        title: title,
+        description: description,
+        link: resourceArray,
+        tags: UserTags,
+        category: category,
+        image: image,
+      };
 
       console.log(post);
-
-
+      try {
+        await dispatch(postCreation.getCategory(category));
+        await dispatch(postCreation.createPost(post));
+      } catch (err) {
+        console.log(err)
+        setError(err.message);
+         Alert.alert("Error", err.message, [{ text: "Okay" }]);
+      }
+      console.log(err);
     } else {
-      if(title.trim().length === 0){
-        setTitleBorder('red')
+      if (title.trim().length === 0) {
+        setTitleBorder("red");
       }
-      if(description.trim().length === 0){
-        setDesBorder('red');
+      if (description.trim().length === 0) {
+        setDesBorder("red");
       }
-       Alert.alert(
-         "",
-         "There are fields that require your attention",
-         [
-           { text: "OK"},
-         ]
-       );
+      Alert.alert("", "There are fields that require your attention", [
+        { text: "OK" },
+      ]);
     }
-
-
   };
 
   const [postList, setPostList] = useState([
@@ -120,32 +138,34 @@ const CreatePost = () => {
   ]);
 
   const [showCatDropDown, setShowCatDropDown] = useState(false);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
   const [listOfSelection, setListOfSelection] = useState([
     {
-      label: "Python",
-      value: "Python",
-      icon: () => <FontAwesome5 name="python" size={24} color="#FFE873" />,
+      label: "AI & Machine Learning",
+      value: "AI & Machine Learning",
+      icon: () => (
+        <MaterialCommunityIcons name="robot" size={24} color="#171717" />
+      ),
     },
     {
-      label: "Java",
-      value: "Java",
-      icon: () => <FontAwesome5 name="java" size={24} color="#f89820" />,
+      label: "Frontend",
+      value: "Frontend",
+      icon: () => <Entypo name="code" size={24} color="#f89820" />,
     },
     {
-      label: "JavaScript",
-      value: "JavaScript",
-      icon: () => <Ionicons name="logo-javascript" size={24} color="#F0DB4F" />,
+      label: "Backend",
+      value: "Backend",
+      icon: () => <AntDesign name="CodeSandbox" size={24} color="#9e79d9" />,
     },
     {
-      label: "HTML",
-      value: "HTML",
-      icon: () => <AntDesign name="HTML" size={24} color="#f06529" />,
+      label: "Software",
+      value: "Software",
+      icon: () => <FontAwesome name="gear" size={24} color="#FFE873" />,
     },
     {
-      label: "CSS",
-      value: "CSS",
-      icon: () => <FontAwesome name="css3" size={24} color="#66D3FA" />,
+      label: "Web",
+      value: "Web",
+      icon: () => <Foundation name="web" size={24} color="#66D3FA" />,
     },
     {
       label: "Cloud Computing",
@@ -153,14 +173,14 @@ const CreatePost = () => {
       icon: () => <AntDesign name="cloud" size={24} color="white" />,
     },
     {
-      label: "React Native",
-      value: "React Native",
-      icon: () => <FontAwesome5 name="react" size={24} color="#61DBFB" />,
+      label: "Algorithms",
+      value: "Algorithms",
+      icon: () => <Entypo name="flow-branch" size={24} color="#ff8282" />,
     },
     {
-      label: "React",
-      value: "React",
-      icon: () => <FontAwesome5 name="react" size={24} color="#61DBFB" />,
+      label: "Networking",
+      value: "Networking",
+      icon: () => <Entypo name="network" size={24} color="#b8e374" />,
     },
   ]);
 
