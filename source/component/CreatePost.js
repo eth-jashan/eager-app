@@ -58,6 +58,7 @@ const CreatePost = () => {
   const [linkeBorder, setLinkeBorder] = useState("black");
 
   const [linkLoader, setLinkLoader] = useState(false);
+  const[postLoader,setPostLoader] = useState(false);
 
   const [tagArray, setTagArray] = useState("");
 
@@ -98,9 +99,13 @@ const CreatePost = () => {
 
       console.log(post);
       try {
+        setPostLoader(true)
         await dispatch(postCreation.getCategory(category));
         await dispatch(postCreation.createPost(post));
+        setPostLoader(false)
+        console.log('CLOSE THE MODAL BY SENDING PROPS TO HOMESCREEN')
       } catch (err) {
+        setPostLoader(false);
         console.log(err)
         setError(err.message);
          Alert.alert("Error", err.message, [{ text: "Okay" }]);
@@ -571,9 +576,13 @@ const CreatePost = () => {
         }}
         onPress={submitForm}
       >
-        <Text style={{ color: colors.primaryLight, fontWeight: "bold" }}>
-          Create Post
-        </Text>
+        {postLoader ? (
+          <ActivityIndicator size="small" color={colors.primaryLight} />
+        ) : (
+          <Text style={{ color: colors.primaryLight, fontWeight: "bold" }}>
+            Create Post
+          </Text>
+        )}
       </TouchableOpacity>
     </SafeAreaView>
   );
