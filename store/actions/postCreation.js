@@ -4,6 +4,10 @@ import firebase from "../../firebase";
 export const CREATE_POST = "CREATE_POST";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_ALL_POST = "GET_ALL_POST";
+export const CHOOSE_CATEGORY = 'CHOOSE_CATEGORY'
+
+const temp_auth_key =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog";
 
 const uuidv4 = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -23,12 +27,12 @@ export const getCategory = (category) => {
       },
     });
     const resData = await response.json();
-    console.log(resData);
+    // console.log('****',resData);
 
     const cat = resData.filter((x) => x.name === category);
-    console.log(cat);
+    // console.log(cat);
 
-    dispatch({ type: GET_CATEGORY, category: cat });
+    dispatch({ type: GET_CATEGORY, category: cat, allCat:resData });
   };
 };
 
@@ -153,3 +157,21 @@ export const getAllPost = () => {
     dispatch({ type: GET_ALL_POST });
   };
 };
+
+export const chooseCategory = (user_category) => {
+  return async (dispatch) => {
+    const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: temp_auth_key,
+      },
+      body: JSON.stringify({
+        category:user_category,
+      }),
+    });
+    const resData = await response.json()
+    console.log(resData)
+    dispatch({ type: CHOOSE_CATEGORY });
+  }
+}
