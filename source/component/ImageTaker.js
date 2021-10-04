@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import { colors } from "../Constants/theme";
+const { width, height } = Dimensions.get("window");
 
 const ImageTaker = (props) => {
   const [image, setImage] = useState("");
@@ -156,7 +157,7 @@ const ImageTaker = (props) => {
         {error.trim().length === 0 ? (
           image.trim().length > 0 ? (
             <Image
-              style={{ height: 200, width: 330, alignSelf: "center" }}
+              style={{ height: height*0.2, width: width*0.85, alignSelf: "center",borderRadius:6 }}
               resizeMode={"cover"}
               source={{
                 uri: image,
