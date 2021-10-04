@@ -6,11 +6,17 @@ import HeaderComponent from '../../component/HeaderComponent';
 import { colors } from '../../Constants/theme';
 import { Ionicons, Fontisto } from '@expo/vector-icons';
 import TopicCard from '../../component/TopicCard';
+import ImageTaker from '../../compon../../component/ImageTaker';
 
 
 const ProfileScreen = () => {
 
   const [select, setSelect] = useState('posts');
+  const [image, setImage] = useState([]);
+
+  const onImageTaken = (value, size) => {
+    setImage([value, size]);
+  };
 
   const listOfPostTitles = ['#Post1', '#Post2', '#Post3', '#Post4'];
   const listOfFavs = ['#fav1', '#fav2', '#fav3', '#fav4'];
@@ -25,12 +31,17 @@ const ProfileScreen = () => {
         />
         <View style={styles.details}>
           <View style={styles.imageContainer}>
-            <Image
+            {(image.length === 0) ? <Image
               fadeDuration={1000}
-              source={{ uri: 'https://cdn.pixabay.com/photo/2018/04/26/16/31/marine-3352341_960_720.jpg' }}
+              source={require("../../../assets/default_DP.jpg")}
               resizeMode='contain'
               style={styles.image}
-            />
+            /> : <Image
+              fadeDuration={1000}
+              source={{uri: image[0].uri}}
+              resizeMode='contain'
+              style={styles.image}
+            />}  
           </View>
           <View style={styles.posts}>
             <TouchableOpacity onPress={() => { }}>
@@ -46,11 +57,7 @@ const ProfileScreen = () => {
           </View>
         </View>
 
-        <TouchableOpacity onPress={() => { }}>
-          <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Change Profile Photo</Text>
-          </View>
-        </TouchableOpacity>
+        <ImageTaker onImageTaken={onImageTaken}/>
 
         <View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -100,27 +107,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     margin: 20,
     alignSelf: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   image: {
     width: 150,
     height: 150,
     borderRadius: 75
-  },
-  buttonContainer: {
-    backgroundColor: colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 6,
-    width: '60%',
-    alignSelf: 'center',
-    marginBottom: 20
-  },
-  buttonText: {
-    fontFamily: 'regular',
-    textAlign: 'center',
-    fontSize: 16,
-    color: 'white'
   },
   details: {
     flexDirection: 'row',

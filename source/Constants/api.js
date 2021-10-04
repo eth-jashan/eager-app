@@ -1,5 +1,5 @@
 export const apiUtils = {
-    baseUrl : '',
-    firebaseBaseUrl : '',
-    googleApiKey : ''
-}
+    baseUrl: "https://eagerapp-deployment.herokuapp.com/api",
+    firebaseBaseUrl: "",
+    googleApiKey: "",
+  };
