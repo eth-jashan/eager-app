@@ -38,6 +38,7 @@ import ImageTaker from "./ImageTaker";
 //actions
 import * as postCreation from "../../store/actions/postCreation";
 import { useDispatch } from "react-redux";
+import MarkDownStyles from "./Styles/MarkDownStyles";
 
 const { width, height } = Dimensions.get("window");
 
@@ -58,7 +59,7 @@ const CreatePost = () => {
   const [linkeBorder, setLinkeBorder] = useState("black");
 
   const [linkLoader, setLinkLoader] = useState(false);
-  const[postLoader,setPostLoader] = useState(false);
+  const [postLoader, setPostLoader] = useState(false);
 
   const [tagArray, setTagArray] = useState("");
 
@@ -74,9 +75,9 @@ const CreatePost = () => {
   };
 
   //move this function to homeScreen
-  const getAllPostt = async() => {
-    await dispatch(postCreation.getAllPost())
-  }
+  const getAllPostt = async () => {
+    await dispatch(postCreation.getAllPost());
+  };
 
   const submitForm = async () => {
     if (
@@ -99,16 +100,16 @@ const CreatePost = () => {
 
       console.log(post);
       try {
-        setPostLoader(true)
+        setPostLoader(true);
         await dispatch(postCreation.getCategory(category));
         await dispatch(postCreation.createPost(post));
-        setPostLoader(false)
-        console.log('CLOSE THE MODAL BY SENDING PROPS TO HOMESCREEN')
+        setPostLoader(false);
+        console.log("CLOSE THE MODAL BY SENDING PROPS TO HOMESCREEN");
       } catch (err) {
         setPostLoader(false);
-        console.log(err)
+        console.log(err);
         setError(err.message);
-         Alert.alert("Error", err.message, [{ text: "Okay" }]);
+        Alert.alert("Error", err.message, [{ text: "Okay" }]);
       }
       console.log(err);
     } else {
@@ -356,7 +357,9 @@ const CreatePost = () => {
                 borderColor: desBorder,
               }}
             >
-              <MarkdownView>{description}</MarkdownView>
+              <MarkdownView style={{ text: "blue" }}>
+                {description}
+              </MarkdownView>
             </View>
           )}
         </View>

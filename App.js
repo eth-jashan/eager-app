@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 
 //----Importing Navigator-----//
-
+  
 
 //-----Custom Font Setup-------//
 import * as Font from 'expo-font'
