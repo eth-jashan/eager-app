@@ -14,6 +14,7 @@ import TopicCard from '../../component/TopicCard'
 import { chooseCategory, getCategory } from '../../../store/actions/postCreation'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
+import { ActivityIndicator } from 'react-native-paper'
 
 
 const {width, height} = Dimensions.get('window')
