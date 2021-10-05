@@ -42,6 +42,7 @@ const AuthScreen = ({navigation}) => {
                     secureTextEntry={false}
                     helperText={false}
                     icon={()=><AntDesign name="user" size={24} color={colors.primary} />}
+                    //onError={true}
                 />
                 <View style={{marginVertical:12}} >
                     <AuthTextInput
