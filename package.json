@@ -35,6 +35,7 @@
     "react-native-tags": "^2.2.0",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
+    "react-native-youtube-iframe": "^2.1.2",
     "react-redux": "^7.2.5",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0"

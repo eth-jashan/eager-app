@@ -11,6 +11,9 @@ import { Modalize } from "react-native-modalize";
 
 //components
 import CreatePost from "../../component/CreatePost";
+import YoutubePost from "../../component/YoutubePost";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
+import HeaderComponent from "../../component/HeaderComponent";
 
 const{width,height} = Dimensions.get('window')
 
@@ -39,7 +42,9 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
-      <View></View>
+    <View>
+      <FlatList data={['1', '2', '3']} renderItem={({item, index})=>(<YoutubePost index={index}/>)} />
+    </View>
       <FloatingAction
         actions={actions}
         onPressItem={(name) => onOptions(name)}
@@ -52,6 +57,7 @@ const HomeScreen = () => {
       >
         <CreatePost />
       </Modalize>
+    
     </SafeAreaView>
   );
 };
