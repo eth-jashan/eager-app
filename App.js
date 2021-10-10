@@ -49,11 +49,15 @@ const[fontLoad, setFontLoad] = useState(false)
 
   if(!fontLoad)
       {
-        return <AppLoading
+        return (
+          <>
+        <AppLoading
         startAsync ={fontLoading}
         onFinish = {() => setFontLoad(true)}
         onError = {(test)=> console.log(test) }
         /> 
+        </>
+        )
       }
 
   return<Provider store={store}><AppNav/></Provider>

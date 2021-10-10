@@ -7,6 +7,7 @@ import AuthScreen from '../screen/AuthFlow/AuthScreen'
 import TopicSelectionPage from '../screen/AuthFlow/TopicSelectionScreen';
 import HomeScreen from '../screen/MainFlow/HomeScreen';
 import { colors } from '../Constants/theme';
+import Toast from 'react-native-toast-message';
 
 const AuthStack = createStackNavigator();
 
@@ -68,10 +69,12 @@ const FlowStack = createStackNavigator()
 const AppNav = () => {
     return(
         <NavigationContainer>
+          
             <FlowStack.Navigator screenOptions={{headerShown:false}}>
             <FlowStack.Screen name='Auth' component={MyAuth}  />
             <FlowStack.Screen name='Main' component={BottomStack}  />
             </FlowStack.Navigator>
+            <Toast ref={(ref) => Toast.setRef(ref)} />
         </NavigationContainer>
     )
 
