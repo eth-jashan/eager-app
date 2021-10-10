@@ -87,6 +87,7 @@ const AuthScreen = ({navigation}) => {
             console.log('response', response.data)
             storeData(response.data, '@user_tokens')
             toastShow(`Woooh🎉🎉🎉`, 'You are successfully logged in', 'success')
+            navigation.navigate('Main')
         } catch (error) {
             setError(true)
             toastShow('Bruuuhhh😟😟😟', 'Something went wrong', 'error')
