@@ -6,6 +6,7 @@ import { Entypo, Feather,MaterialIcons,Ionicons,FontAwesome5  } from '@expo/vect
 import AuthScreen from '../screen/AuthFlow/AuthScreen'
 import TopicSelectionPage from '../screen/AuthFlow/TopicSelectionScreen';
 import HomeScreen from '../screen/MainFlow/HomeScreen';
+import ProfileScreen from '../screen/MainFlow/ProfileScreen';
 import { colors } from '../Constants/theme';
 import Toast from 'react-native-toast-message';
 
@@ -48,7 +49,7 @@ const BottomStack = () => {
         />
         <Tab.Screen
           name="Profile"
-          component={HomeScreen}
+          component={ProfileScreen}
           options={{
             tabBarLabel: "Profile",
             tabBarIcon: ({ color }) => (
