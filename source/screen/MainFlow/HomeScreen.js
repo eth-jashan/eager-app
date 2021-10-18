@@ -26,6 +26,10 @@ const HomeScreen = () => {
     }
   };
 
+  const onSelect = (id) => {
+    console.log('take me senpai to detail')
+  }
+
   const onOpen = async () => {
     modalizeRef.current?.open();
   };
@@ -42,9 +46,19 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
-    <View>
-      <FlatList data={['1', '2', '3']} renderItem={({item, index})=>(<YoutubePost index={index}/>)} />
-    </View>
+      <View>
+        <FlatList
+          data={["1", "2", "3"]}
+          renderItem={({ item, index }) => (
+            <YoutubePost
+              contentSmall={false}
+              data={item}
+              index={index}
+              onSelect={onSelect}
+            />
+          )}
+        />
+      </View>
       <FloatingAction
         actions={actions}
         onPressItem={(name) => onOptions(name)}
@@ -57,7 +71,6 @@ const HomeScreen = () => {
       >
         <CreatePost />
       </Modalize>
-    
     </SafeAreaView>
   );
 };

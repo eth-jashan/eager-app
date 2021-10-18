@@ -3,10 +3,18 @@ import { Dimensions, Image, Text, View } from 'react-native'
 import { AntDesign,Feather, Ionicons, Entypo, Foundation, MaterialCommunityIcons, FontAwesome, FontAwesome5} from "@expo/vector-icons";
 import { colors } from '../Constants/theme';
 import LinkPreview from "react-native-link-preview";
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 const {width, height} = Dimensions.get('window')
 
-const YoutubePost = ({index}) => {
+const YoutubePost = ({index,contentSmall,data,onSelect}) => {
+
+  const[selected,setSelected] = useState(false);
+
+  const onAddToCollection = (data) => {
+    setSelected(!selected)
+     onSelect(data);
+
+  }
 
     const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/learn-press-profile/4/172522ec1028ab781d9dfd17eaca4427.jpg'
     const dummyProfileName = 'Jashan Shetty'
@@ -131,11 +139,11 @@ const YoutubePost = ({index}) => {
       },
     ]
     const renderUserInfo = () => (
-      <View style={{justifyContent:'space-between', flexDirection:'row',width:'100%'}}>
+      <View style={{justifyContent:'space-between', flexDirection:'row',width:'100%',marginBottom:5}}>
         <View style={{ flexDirection:'row', borderTopRightRadius:16, borderTopLeftRadius:16}}>
             <Image source={{uri:dummyProfilePic}} style={{width:40, height:40, borderRadius:40}} />
             <View style={{marginLeft:12, alignSelf:'center'}}>
-                <Text style={{fontFamily:'medium', fontSize:16, color:'white'}}>{dummyProfileName}</Text>
+                <Text numberOfLines={contentSmall? 1:null} style={{fontFamily:'medium', fontSize:contentSmall?13: 16, color:'white'}}>{dummyProfileName}</Text>
                 
                   <View style={{flexDirection:'row'}}>
                       {postType[2].icon()}
@@ -143,7 +151,7 @@ const YoutubePost = ({index}) => {
                   </View>
             </View>
         </View>
-        <Entypo style={{alignSelf:'center'}}  name="dots-three-horizontal" size={24} color="white" />
+        {/* {contentSmall?null:<Entypo style={{alignSelf:'center'}}  name="dots-three-horizontal" size={24} color="white" />} */}
       </View>
     )
 
@@ -191,7 +199,7 @@ const YoutubePost = ({index}) => {
     }
     const renderCategory = () => (
       <View style={{marginBottom:8}}>
-        <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{categoryType.length} categories selected </Text>
+        {/* <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{categoryType.length} categories selected </Text> */}
         <FlatList horizontal data={categoryType} keyExtractor={(_, i)=>i.toString()}
           renderItem={({item, index})=>(singleCategory(item))} />
       </View>
@@ -199,13 +207,13 @@ const YoutubePost = ({index}) => {
     const renderReaction = () => (
       <View style={{flexDirection:'row'}}>
         <View style={{flexDirection:'row', margin:6}}>
-          <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:liked?colors.primary:'white'}}>25</Text>
-          <Entypo onPress={()=>setLiked(!liked)} name="arrow-bold-up" size={20} color={liked?colors.primary:"white"} />
+          <Text style={{fontFamily:'medium', fontSize:contentSmall?13: 16,alignSelf:'center', color:liked?colors.primary:'white'}}>25</Text>
+          <Entypo onPress={()=>setLiked(!liked)} name="arrow-bold-up" size={contentSmall?17: 20} color={liked?colors.primary:"white"} />
         </View>
-        <View style={{flexDirection:'row', margin:6}}>
+        {contentSmall?null:<View style={{flexDirection:'row', margin:6}}>
           <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:'white'}}>10</Text>
           <FontAwesome5 style={{marginLeft:4}} name="comment" size={20} color="white" />
-        </View>
+        </View>}
       </View>
     )
     const renderImage = () => (
@@ -214,16 +222,17 @@ const YoutubePost = ({index}) => {
       </View>
     )
     return(
-        <View style={[{width:width*0.94, borderRadius:16, backgroundColor:'black', padding:12, alignSelf:'center', marginVertical:8}]}>
+        <TouchableWithoutFeedback onPress={() =>contentSmall? onAddToCollection(data):null}
+         style={[{width:contentSmall?width*0.44: width*0.94, borderRadius:16, backgroundColor:selected?colors.primaryDark: colors.secondaryBlack, padding:12, alignSelf:'center', marginVertical:8 , marginHorizontal:contentSmall? width*0.017:null}]}>
             {renderUserInfo()}
-            <Text style={{fontFamily:'medium', fontWeight:'bold', fontSize:20, color:'white', marginVertical:12}}>{"React Native: FlatList keyExtractor & toString() Issue?"}</Text>
-            {renderDescription()}
-            {index %2===0&&linkMeta()}
-            {renderCategory()}
-            {index %2!==0&&renderImage()}
-            {renderReaction()}
+            {!contentSmall? renderCategory():null}
+            <Text numberOfLines={contentSmall? 3:null} style={{fontFamily:'medium', fontWeight:'bold', fontSize:contentSmall?12: 20 ,color:'white', marginVertical:12}}>{"React Native: FlatList keyExtractor & toString() Issue?"}</Text>
+            {!contentSmall? renderDescription():null}
+            {/* {!contentSmall? index %2===0&&linkMeta():null} */}
+            {/* {!contentSmall?index %2!==0&&renderImage():null} */}
+            { renderReaction()}
 
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
 
