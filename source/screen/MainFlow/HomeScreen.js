@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { View, Text, Dimensions, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../Constants/theme";
@@ -9,15 +10,35 @@ import { Ionicons } from "@expo/vector-icons";
 import { FloatingAction } from "react-native-floating-action";
 import { Modalize } from "react-native-modalize";
 
+//actions
+import * as postActions from '../../../store/actions/postCreation';
+
 //components
 import CreatePost from "../../component/CreatePost";
 import YoutubePost from "../../component/YoutubePost";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import HeaderComponent from "../../component/HeaderComponent";
+import { ActivityIndicator } from "react-native-paper";
+
 
 const{width,height} = Dimensions.get('window')
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+  const [posts,setPosts] = useState();
+
+  const loadpost = async() => {
+    const post =  await postActions.getPost()
+    setPosts(post);
+  }
+
+  useEffect(()=>{
+    const start = navigation.addListener('focus', () => {
+      loadpost()
+    });
+
+    return start;
+  },[navigation])
+
   const modalizeRef = useRef(null);
   const onOptions = (name) => {
     console.log(name)
@@ -29,6 +50,7 @@ const HomeScreen = () => {
   const onSelect = (id) => {
     console.log('take me senpai to detail')
   }
+
 
   const onOpen = async () => {
     modalizeRef.current?.open();
@@ -46,19 +68,28 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
-      <View>
-        <FlatList
-          data={["1", "2", "3"]}
-          renderItem={({ item, index }) => (
-            <YoutubePost
-              contentSmall={false}
-              data={item}
-              index={index}
-              onSelect={onSelect}
-            />
-          )}
+      {posts ? (
+        <View>
+          <FlatList
+            data={posts}
+            renderItem={({ item, index }) => (
+              <YoutubePost
+                contentSmall={false}
+                data={item}
+                index={index.toString()}
+                onSelect={onSelect}
+                holdModal={false}
+              />
+            )}
+          />
+        </View>
+      ) : (
+        <ActivityIndicator
+          style={{ justifyContent: "center", alignSelf: "center" }}
+          size="small"
+          color={colors.primaryLight}
         />
-      </View>
+      )}
       <FloatingAction
         actions={actions}
         onPressItem={(name) => onOptions(name)}

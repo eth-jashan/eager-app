@@ -578,6 +578,7 @@ const CreatePost = () => {
           borderWidth: 1,
         }}
         onPress={submitForm}
+        disabled = {postLoader}
       >
         {postLoader ? (
           <ActivityIndicator size="small" color={colors.primaryLight} />

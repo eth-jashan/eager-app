@@ -4,10 +4,10 @@ import firebase from "../../firebase";
 export const CREATE_POST = "CREATE_POST";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_ALL_POST = "GET_ALL_POST";
-export const CHOOSE_CATEGORY = 'CHOOSE_CATEGORY'
+export const CHOOSE_CATEGORY = "CHOOSE_CATEGORY";
 
-const temp_auth_key =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog";
+const auth_key =
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2MDIzMzY3LCJqdGkiOiI2OTA4MGJhN2Q5YmY0NjVmYTEyOWE5NjJjZjA1ODVjZSIsInVzZXJfaWQiOjIyfQ.O7eXCpHhBBultD4XencPm9SGk7PAEuVkoHuIYcRxDgI";
 
 const uuidv4 = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -22,8 +22,7 @@ export const getCategory = (category) => {
     const response = await fetch(`${apiUtils.baseUrl}/learnapp/category/list`, {
       method: "GET",
       headers: {
-        Authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog",
+        Authorization: auth_key,
       },
     });
     const resData = await response.json();
@@ -32,7 +31,7 @@ export const getCategory = (category) => {
     const cat = resData.filter((x) => x.name === category);
     // console.log(cat);
 
-    dispatch({ type: GET_CATEGORY, category: cat, allCat:resData });
+    dispatch({ type: GET_CATEGORY, category: cat, allCat: resData });
   };
 };
 
@@ -54,8 +53,7 @@ export const createPost = (post) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog",
+            Authorization: auth_key,
           },
           body: JSON.stringify({
             title: post.title,
@@ -80,7 +78,7 @@ export const createPost = (post) => {
       const fileName = uuidv4();
       const formData = new FormData();
 
-      formData.append("image", {
+      formData.append("file", {
         uri: tempUrl,
         name: fileName,
         type: `image/*`,
@@ -91,8 +89,7 @@ export const createPost = (post) => {
           method: "POST",
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization:
-              "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog",
+            Authorization: auth_key,
           },
           body: formData,
         }
@@ -113,8 +110,7 @@ export const createPost = (post) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization:
-                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog",
+              Authorization: auth_key,
             },
             body: JSON.stringify({
               title: post.title,
@@ -140,22 +136,18 @@ export const createPost = (post) => {
   };
 };
 
-export const getAllPost = () => {
-  return async (dispatch) => {
-    const response = await fetch(
-      `${apiUtils.baseUrl}/learnapp/post/list?query=newest`,
-      {
-        method: "GET",
-        headers: {
-          Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjMzNDQxNTM0LCJqdGkiOiI0ZDEzNzliM2ZlMjg0NDUwYjIyZTFjNTQzNTFiZGY4YiIsInVzZXJfaWQiOjR9.8WP1eid61uEjTS73-pkmnDkehYKQbjkiz9VZxkfRPog",
-        },
-      }
-    );
-    const resData = await response.json();
-    console.log(resData);
-    dispatch({ type: GET_ALL_POST });
-  };
+export const getPost = async () => {
+  const response = await fetch(
+    `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: auth_key,
+      },
+    }
+  );
+  const resData = await response.json();
+  return resData;
 };
 
 export const chooseCategory = (user_category) => {
@@ -164,14 +156,79 @@ export const chooseCategory = (user_category) => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: temp_auth_key,
+        Authorization: auth_key,
       },
       body: JSON.stringify({
-        category:user_category,
+        category: user_category,
       }),
     });
-    const resData = await response.json()
-    console.log(resData)
+    const resData = await response.json();
+    console.log(resData);
     dispatch({ type: CHOOSE_CATEGORY });
+  };
+};
+
+export const createCollection = async (title, description, idArray) => {
+  const response = await fetch(
+    `${apiUtils.baseUrl}/learnapp/collection/create/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth_key,
+      },
+      body: JSON.stringify({
+        title: title,
+        description: description,
+        posts: idArray,
+      }),
+    }
+  );
+  const resData = await response.json();
+  return resData;
+};
+
+export const getProfile = async () => {
+  const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: auth_key,
+    },
+  });
+  const resData = await response.json();
+  return resData;
+};
+
+export const getCollections = async () => {
+  const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/list`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: auth_key,
+    },
+  });
+  const resData = await response.json();
+  return resData;
+};
+
+export const loadStaticImages = async () => {
+  console.log("working");
+  const formData = new FormData();
+  formData.append("type", "backgrounds");
+  console.log("FORM", formData);
+  try {
+    const response = await fetch(`${apiUtils.baseUrl}/learnapp/file/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: auth_key,
+      },
+      body: formData,
+    });
+    const resData = await response.json();
+    return resData;
+  } catch (err) {
+    console.log(err);
   }
-}
+};
