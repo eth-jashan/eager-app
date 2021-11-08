@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { Dimensions, Image, Pressable, Text, View } from 'react-native'
-import { AntDesign, Entypo, Foundation, MaterialCommunityIcons, FontAwesome, FontAwesome5} from "@expo/vector-icons";
-import { colors } from '../Constants/theme';
+import React, { useRef, useState, useEffect } from "react";
+import { View, Text, Dimensions, KeyboardAvoidingView, Image, FlatList, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../../Constants/theme";
 import LinkPreview from "react-native-link-preview";
-import { FlatList } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/core';
-const {width, height} = Dimensions.get('window')
 
+//icons
+import { Ionicons } from "@expo/vector-icons";
+import { Modalize } from "react-native-modalize";
 
+//components
+import CreatePost from "../../component/CreatePost";
+import YoutubePost from "../../component/YoutubePost";
+import {  ScrollView } from "react-native-gesture-handler";
+import HeaderComponent from "../../component/HeaderComponent";
+import { AntDesign, Entypo ,Foundation, MaterialCommunityIcons, FontAwesome , FontAwesome5} from '@expo/vector-icons';
+import { MarkdownView } from "react-native-markdown-view";
+import WebView from "react-native-webview";
 
-const YoutubePost = ({index}) => {
+const DetailScreenc = ({navigation}) => {
 
-  const navigation = useNavigation()
+const{width,height} = Dimensions.get('window')
+const modalizeRef = useRef(null);
+const [link, setLink] = useState();
+const [type, setType] = useState();
 
-    const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/learn-press-profile/4/172522ec1028ab781d9dfd17eaca4427.jpg'
+const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/learn-press-profile/4/172522ec1028ab781d9dfd17eaca4427.jpg'
     const dummyProfileName = 'Jashan Shetty'
-    const dummyDescription = "What does the 2nd line actually mean ?\ndata={this.state.data} keyExtractor={(x,i)=>i}"
+    const dummyDescription = "`` Lorem Ipsum is simply dummy text of t specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Why do we use it It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).Where does it come from? Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum(The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very ``"
     const textLimit = 100
     const postLink = [{type:'YoutubeLink', link:'https://www.youtube.com/watch?v=Qqx_wzMmFeA', meta:{
       "contentType": "text/html; charset=utf-8",
@@ -34,7 +45,7 @@ const YoutubePost = ({index}) => {
       "title": "JavaScript Tutorial for Beginners - Full Course in 8 Hours [2020]",
       "url": "https://www.youtube.com/watch?v=Qqx_wzMmFeA",
       "videos":  [],
-    }},{type:'YoutubeLink', link:'https://www.youtube.com/watch?v=9ZmjGdwtvP4', meta:{
+    }},{type:'YoutubeLink', link:'https://medium.com/game-development-stuff/how-to-apply-shadows-on-react-native-fa745d374ae7', meta:{
       "contentType": "text/html; charset=utf-8",
   "description": "Some weeks ago I spent some time researching about how to apply shadows on iOS and Android on a react-native project. It ended being a bit messy topic, with several options to use and not being able…",
   "favicons":  [
@@ -137,7 +148,7 @@ const YoutubePost = ({index}) => {
       },
     ]
     const renderUserInfo = () => (
-      <View style={{justifyContent:'space-between', flexDirection:'row',width:'100%'}}>
+      <View style={{justifyContent:'space-between', flexDirection:'row',width:'100%', padding:12, backgroundColor:colors.secondaryBlack}}>
         <View style={{ flexDirection:'row', borderTopRightRadius:16, borderTopLeftRadius:16}}>
             <Image source={{uri:dummyProfilePic}} style={{width:40, height:40, borderRadius:40}} />
             <View style={{marginLeft:12, alignSelf:'center'}}>
@@ -149,29 +160,33 @@ const YoutubePost = ({index}) => {
                   </View>
             </View>
         </View>
-        <Entypo style={{alignSelf:'center'}}  name="dots-three-horizontal" size={24} color="white" />
       </View>
     )
 
     const renderDescription = () => (
-      <View style={{marginVertical:12}}>
-        <Text style={{fontFamily:'medium', fontSize:16, color:'white'}}>{dummyDescription.slice(0,textLimit)} <Text style={{color:colors.primary, alignSelf:'center', fontSize:14}}>Tap to know more.</Text></Text>
-      </View>
+      <MarkdownView style={{ text: "blue" , width:width}}>
+        {dummyDescription}
+      </MarkdownView>
     )
+    const onMetaPress = (item) => {
+      setLink(item?.link)
+      setType(item?.type)
+      modalizeRef.current?.open()
+    }
     const renderLink = (item , index) => {
       // console.log('Linkkk', item.meta.images[0])
       if(item?.type === 'YoutubeLink'){
         return(
-          <View style={{margin:8}}>
+          <Pressable onPress={()=>onMetaPress(item)} style={{margin:8}}>
             <View style={{flexDirection:'row'}}>
             <Image source={{uri:item.meta.favicons[2]}} style={{height:32, width:32}} />
             {/* <Text style={{fontSize:16, fontFamily:'medium', color:'white', alignSelf:'center', marginLeft:6}}>YouTube</Text> */}
             </View>
             <Text numberOfLines={1} style={{fontSize:14, fontFamily:'regular', color:'white', width:200}}>{item.meta.title}</Text>
             <View>
-            {/* <Image resizeMode='contain' style={{height:150, width:200}} source={{uri:item.meta.images[0]}} /> */}
+            <Image resizeMode='contain' style={{height:150, width:200}} source={{uri:item.meta.images[0]}} />
             </View>
-          </View>
+          </Pressable>
         )
       }
       
@@ -197,40 +212,79 @@ const YoutubePost = ({index}) => {
     }
     const renderCategory = () => (
       <View style={{marginBottom:8}}>
-        <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{categoryType.length} categories selected </Text>
-        <FlatList horizontal data={categoryType} keyExtractor={(_, i)=>i.toString()}
+        {/* <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{categoryType.length} categories selected </Text> */}
+        <FlatList horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{marginVertical:6}} data={categoryType} keyExtractor={(_, i)=>i.toString()}
           renderItem={({item, index})=>(singleCategory(item))} />
       </View>
     )
     const renderReaction = () => (
-      <View style={{flexDirection:'row'}}>
+      <View style={{flexDirection:'row', justifyContent:'space-between'}}>
         <View style={{flexDirection:'row', margin:6}}>
           <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:liked?colors.primary:'white'}}>25</Text>
           <Entypo onPress={()=>setLiked(!liked)} name="arrow-bold-up" size={20} color={liked?colors.primary:"white"} />
         </View>
         <View style={{flexDirection:'row', margin:6}}>
           <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:'white'}}>10</Text>
-          <FontAwesome5 style={{marginLeft:4}} name="comment" size={20} color="white" />
+          <FontAwesome5 onPress={()=>navigation.navigate('CommentScreen')}  style={{marginLeft:4}} name="comment" size={20} color="white" />
+        </View>
+        <View style={{flexDirection:'row', margin:6}}>
+        <AntDesign  name="sharealt" size={24} color="white" />
         </View>
       </View>
     )
     const renderImage = () => (
-      <View style={{width:width*0.8, alignSelf:'center'}}>
-        <Image resizeMode='cover' source={{uri:'https://i.pinimg.com/originals/c5/51/8c/c5518ce985fbbb402c67dd53faef7972.jpg'}} style={{width:'100%', height:height*0.2 }} />
+      <View style={{width:width*0.98, alignSelf:'center'}}>
+        <Image resizeMode='cover' source={{uri:'https://i.pinimg.com/originals/c5/51/8c/c5518ce985fbbb402c67dd53faef7972.jpg'}} style={{width:'100%', height:width*0.8 }} />
       </View>
     )
-    return(
-        <Pressable onPress={()=>navigation.navigate('DetailScreen')} style={[{width:width*0.94, borderRadius:16, backgroundColor:'black', padding:12, alignSelf:'center', marginVertical:8}]}>
-            {renderUserInfo()}
-            {renderCategory()}
-            <Text style={{fontFamily:'medium', fontWeight:'bold', fontSize:20, color:'white', marginVertical:12}}>{"React Native: FlatList keyExtractor & toString() Issue?"}</Text>
-            {renderDescription()}
-            {index %2===0&&linkMeta()}
-            {index %2!==0&&renderImage()}
-            {renderReaction()}
+    
+    const renderContent = () => {
+      return(
+        <View style={{padding:8, marginBottom:100}}>
+        <Text style={{paddingLeft:8,paddingRight:8, fontFamily:'medium', fontWeight:'bold', fontSize:20, color:'white', marginBottom:12}}>{"React Native: FlatList keyExtractor & toString() Issue?"}</Text>
+        {renderImage()}
+        {renderDescription()}
+        {linkMeta()}
+        </View>
+      )
+    }
 
-        </Pressable>
-    )
-}
+    const renderHeader = () => {
+      return(
+        <HeaderComponent headerStyles={{borderBottomWidth:0.2, backgroundColor:colors.secondary, padding:12}} leftIcon={()=>(<AntDesign name="arrowleft" size={24} color={colors.primaryDark} />)} />
+      )
+    }
 
-export default YoutubePost
+    const detailBlocks = [{item:renderHeader()},
+    {item:renderUserInfo()},
+    {item:renderCategory()},
+    {item:renderContent()}]
+
+
+  return (
+      <SafeAreaView style={{flex:1}}>
+      <FlatList keyExtractor={(_,i)=>i.toString()} contentContainerStyle={{ backgroundColor: colors.secondary }} data={detailBlocks} renderItem={({item, index})=>item.item} />
+
+        <View style={{position:'absolute', bottom: 20, width:'90%', padding:12, backgroundColor:colors.secondaryBlack, alignSelf:'center', borderRadius:18}}>
+          {renderReaction()}
+      </View>     
+
+      <Modalize
+        modalStyle={{ backgroundColor: colors.modal }}
+        modalHeight={height}
+        ref={modalizeRef}
+        handlePosition={"inside"}
+        closeOnOverlayTap
+      >
+        <ScrollView>
+        <WebView 
+          style={{height: height, width:'100%'}}
+          source={{ uri: link }}
+        />
+        </ScrollView>
+      </Modalize>
+    </SafeAreaView>
+  );
+};
+
+export default DetailScreenc;

@@ -9,6 +9,8 @@ import HomeScreen from '../screen/MainFlow/HomeScreen';
 import ProfileScreen from '../screen/MainFlow/ProfileScreen';
 import { colors } from '../Constants/theme';
 import Toast from 'react-native-toast-message';
+import DetailScreenc from '../screen/MainFlow/DetailScreen';
+import CommentScreen from '../screen/MainFlow/CommentScreen';
 
 const AuthStack = createStackNavigator();
 
@@ -21,7 +23,17 @@ const MyAuth =()=> {
   );
 }
 
+const HomeStack = createStackNavigator();
 
+const HomeNav =()=> {
+  return (
+    <HomeStack.Navigator initialRouteName={"BootomTab"}  screenOptions={{headerShown:false}}>
+    <HomeStack.Screen name="BottomTab" component={BottomStack} />   
+    <HomeStack.Screen name="DetailScreen" component={DetailScreenc} /> 
+    <HomeStack.Screen name="CommentScreen" component={CommentScreen} />
+    </HomeStack.Navigator>
+  );
+}
 
 
 
@@ -33,7 +45,10 @@ const BottomStack = () => {
       <Tab.Navigator
         initialRouteName="Home"
         activeColor={colors.primaryLight}
-        barStyle={{ backgroundColor: colors.secondaryBlack}}
+        barStyle={{
+          backgroundColor: colors.secondary,
+          borderTopWidth:0.3
+        }}
         shifting={true}
         screenOptions={{ headerShown: false }}
       >
@@ -72,8 +87,8 @@ const AppNav = () => {
         <NavigationContainer>
           
             <FlowStack.Navigator screenOptions={{headerShown:false}}>
-            <FlowStack.Screen name='Auth' component={MyAuth}  />
-            <FlowStack.Screen name='Main' component={BottomStack}  />
+            {/* <FlowStack.Screen name='Auth' component={MyAuth}  /> */}
+            <FlowStack.Screen name='Main' component={HomeNav}  />
             </FlowStack.Navigator>
             <Toast ref={(ref) => Toast.setRef(ref)} />
         </NavigationContainer>
