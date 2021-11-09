@@ -147,7 +147,6 @@ export const getPost = async () => {
     }
   );
   const resData = await response.json();
-  console.log("resdata", resData);
   return resData;
 };
 
@@ -186,6 +185,9 @@ export const createCollection = async (title, description, idArray) => {
     }
   );
   const resData = await response.json();
+  if(resData.errors){
+    throw new Error(resData.errors[0])
+  }
   return resData;
 };
 
@@ -214,18 +216,12 @@ export const getCollections = async () => {
 };
 
 export const loadStaticImages = async () => {
-  console.log("working");
-  const formData = new FormData();
-  formData.append("type", "backgrounds");
-  console.log("FORM", formData);
   try {
-    const response = await fetch(`${apiUtils.baseUrl}/learnapp/file/`, {
-      method: "POST",
+    const response = await fetch(`${apiUtils.baseUrl}/learnapp/file/?type=backgrounds`, {
+      method: "GET",
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: auth_key,
       },
-      body: formData,
     });
     const resData = await response.json();
     return resData;
@@ -233,3 +229,31 @@ export const loadStaticImages = async () => {
     console.log(err);
   }
 };
+
+export const detailedCollection = async(id) => {
+  try{
+      const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/${id}/detail`, {
+      method: "GET",
+      headers: {
+        Authorization: auth_key,
+      },
+    });
+    const resData = await response.json();
+    return resData;
+  }catch(err){
+    console.log(err)
+  }
+}
+
+export const deleteCollection = async(id) => {
+  try{
+      const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/${id}/delete/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: auth_key,
+      },
+    });
+  }catch(err){
+    console.log(err)
+  }
+}
