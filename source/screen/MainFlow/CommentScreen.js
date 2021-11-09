@@ -15,7 +15,10 @@ const CommentScreen = () => {
         )
     }
 
-    const commentList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    const commentList = [{name:'Jashan Shetty', comment:'By the title of this post, it might seem that this is going to be filled with random'}, 
+    {name:'Piyush Joshi', comment:'is going to be filled with random text just to '},
+    {name:'Arjun VR', comment:'By the title of this post, it might seem that this'},
+    {name:'Mandar Parab', comment:`seem that this is going to be filled with random ${dummyText1}`}]
 
     const renderReaction = () => (
         <View style={{flexDirection:'row'}}>
@@ -33,7 +36,7 @@ const CommentScreen = () => {
       )
 
     return(
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1, backgroundColor:colors.secondaryBlack}}>
             {renderHeader()}
             <FlatList 
                 data={commentList}
@@ -45,8 +48,8 @@ const CommentScreen = () => {
                                 <Image source={{uri:dummyProfilePic}} style={{width:30, height:30, borderRadius:20}}/>
                             </View>
                             <View style={{marginLeft:16, marginRight:8}}>
-                                <Text style={{fontFamily:'medium', fontSize:16, fontWeight:'bold', color:'white'}} >Jashan Shetty</Text>
-                                <Text style={{fontFamily:'light', fontSize:14,  color:'white', marginTop:4}} >{dummyText1}</Text>
+                                <Text style={{fontFamily:'medium', fontSize:16, fontWeight:'bold', color:'white'}} >{item.name}</Text>
+                                <Text style={{fontFamily:'light', fontSize:14,  color:'white', marginTop:4}} >{item.comment}</Text>
                                 <View>
                                     {renderReaction()}
                                 </View>

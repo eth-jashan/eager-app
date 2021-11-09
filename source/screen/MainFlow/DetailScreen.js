@@ -224,6 +224,9 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
           <Entypo onPress={()=>setLiked(!liked)} name="arrow-bold-up" size={20} color={liked?colors.primary:"white"} />
         </View>
         <View style={{flexDirection:'row', margin:6}}>
+            <Entypo name="arrow-bold-down" size={20} color={"white"} />
+          </View>
+        <View style={{flexDirection:'row', margin:6}}>
           <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:'white'}}>10</Text>
           <FontAwesome5 onPress={()=>navigation.navigate('CommentScreen')}  style={{marginLeft:4}} name="comment" size={20} color="white" />
         </View>
