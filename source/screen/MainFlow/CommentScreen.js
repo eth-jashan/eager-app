@@ -23,7 +23,7 @@ const CommentScreen = () => {
     const renderReaction = () => (
         <View style={{flexDirection:'row'}}>
           <View style={{flexDirection:'row', margin:6}}>
-            <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:'white'}}>25</Text>
+            <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:'white'}}>5</Text>
             <Entypo name="arrow-bold-up" size={20} color={"white"} />
           </View>
           <View style={{flexDirection:'row', margin:6}}>
@@ -61,7 +61,7 @@ const CommentScreen = () => {
                 <View>
                     <Image source={{uri:dummyProfilePic}} style={{width:30, height:30, borderRadius:20, alignSelf:'center'}}/>
                 </View>
-                <TextInput multiline placeholderTextColor={'white'} placeholder='Enter Comment...' style={{width:'80%', padding:8, marginLeft:6, alignSelf:'center'}} />
+                <TextInput multiline   placeholderTextColor={'white'} placeholder='Enter Comment...' style={{width:'80%', padding:8, marginLeft:6, alignSelf:'center',color:'white'}} />
                 <Pressable style={{alignSelf:'center'}}>
                     <Text style={{color:colors.primary, fontFamily:'medium', fontSize:18, alignSelf:'center'}}>Post</Text>
                 </Pressable>

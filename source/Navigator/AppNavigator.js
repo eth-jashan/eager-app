@@ -105,7 +105,7 @@ const AppNav = () => {
         <NavigationContainer>
           
             <FlowStack.Navigator screenOptions={{headerShown:false}}>
-            <FlowStack.Screen name='Auth' component={MyAuth}  />
+            {/* <FlowStack.Screen name='Auth' component={MyAuth}  /> */}
             <FlowStack.Screen name='Main' component={HomeNav}  />
             </FlowStack.Navigator>
             <Toast ref={(ref) => Toast.setRef(ref)} />

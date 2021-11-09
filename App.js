@@ -44,7 +44,7 @@ const fontLoading = () =>{
 
 
 export default function App({navigation}){
-
+console.disableYellowBox = true;
 const[fontLoad, setFontLoad] = useState(false)
 
   if(!fontLoad)
