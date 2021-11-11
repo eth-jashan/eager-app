@@ -5,9 +5,10 @@ export const CREATE_POST = "CREATE_POST";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_ALL_POST = "GET_ALL_POST";
 export const CHOOSE_CATEGORY = "CHOOSE_CATEGORY";
+export const GET_PROFILE_DETAILS = "GET_PROFILE_DETAILS";
 
 const auth_key =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NDgzNTE4LCJqdGkiOiI2MDEzNjI5MGViYzM0MGY5YTY2ODYzMWI0NzgzYjNiNCIsInVzZXJfaWQiOjIyfQ.qM1b5bpdAKSKeMnnl127KVZgNEx3TWQwtD-nOnc7V-g";
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NzE0NjQwLCJqdGkiOiIzM2JkNmRmMTk1MDA0MGUyOGNlMjNhNzQwM2UzNDI2OCIsInVzZXJfaWQiOjI4fQ.ajTHfVf0u9w9bWDH-xwn54R4slTtSPGfZjvYheaLszs";
 
 const uuidv4 = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -137,18 +138,35 @@ export const createPost = (post) => {
 };
 
 export const getPost = async () => {
-  const response = await fetch(
-    `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: auth_key,
-      },
-    }
-  );
-  const resData = await response.json();
-  console.log("resdata", resData);
-  return resData;
+    const response = await fetch(
+      `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: auth_key,
+        },
+      }
+    );
+    const resData = await response.json();
+    return resData;
+};
+
+export const getAllPost = () => {
+  return async (dispatch) => {
+    const response = await fetch(
+      `${apiUtils.baseUrl}/learnapp/post/list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth_key,
+        },
+      }
+    );
+    const resData = await response.json();
+    console.log(resData);
+    dispatch({type: GET_ALL_POST, posts: resData});
+  };
 };
 
 export const chooseCategory = (user_category) => {
@@ -164,7 +182,6 @@ export const chooseCategory = (user_category) => {
       }),
     });
     const resData = await response.json();
-    console.log(resData);
     dispatch({ type: CHOOSE_CATEGORY });
   };
 };
@@ -189,16 +206,19 @@ export const createCollection = async (title, description, idArray) => {
   return resData;
 };
 
-export const getProfile = async () => {
-  const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: auth_key,
-    },
-  });
-  const resData = await response.json();
-  return resData;
+export const getProfile = () => {
+  return async (dispatch) => {
+    const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth_key,
+      },
+    });
+    const resData = await response.json();
+    // console.log(resData);
+    dispatch({type: GET_PROFILE_DETAILS, details:resData});
+  };  
 };
 
 export const getCollections = async () => {

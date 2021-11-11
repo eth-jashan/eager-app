@@ -13,6 +13,8 @@ import { AntDesign,Feather } from '@expo/vector-icons';
 import { imageUtils } from '../../Constants/assets';
 import { apiUtils } from '../../Constants/api';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+import * as postActions from '../../../store/actions/postCreation';
 const {width, height} = Dimensions.get('window')
 
 
@@ -25,6 +27,8 @@ const AuthScreen = ({navigation}) => {
     const [rePassword, setRePassword] = useState('')
     const [showpass, setShowPass] = useState(true)
     const [error, setError] = useState(false)
+
+    const dispatch = useDispatch();
 
     const storeData = async (value, keyValue) => {
         try {
@@ -87,6 +91,7 @@ const AuthScreen = ({navigation}) => {
             console.log('response', response.data)
             storeData(response.data, '@user_tokens')
             toastShow(`Woooh🎉🎉🎉`, 'You are successfully logged in', 'success')
+            dispatch(postActions.getProfile())
             navigation.navigate('Main')
         } catch (error) {
             setError(true)
