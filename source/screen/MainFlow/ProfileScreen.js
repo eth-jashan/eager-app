@@ -1,25 +1,65 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions, ActionSheetIOS } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from "react-native-safe-area-context";
 import HeaderComponent from '../../component/HeaderComponent';
 import { colors } from '../../Constants/theme';
 import { Ionicons, Fontisto } from '@expo/vector-icons';
-import TopicCard from '../../component/TopicCard';
+import EditPostCard from '../../component/EditPostCard';
 import ImageTaker from '../../compon../../component/ImageTaker';
+import CreatePost from '../../component/CreatePost';
+import { Modalize } from 'react-native-modalize';
+import { AntDesign } from '@expo/vector-icons';
+
+import * as postActions from '../../../store/actions/postCreation';
+import { useDispatch, useSelector} from 'react-redux';
 
 
-const ProfileScreen = () => {
+const{width,height} = Dimensions.get('window');
+
+const ProfileScreen = (props) => {
 
   const [select, setSelect] = useState('posts');
   const [image, setImage] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const modalizeRef = useRef(null);
+  const dispatch = useDispatch();
 
   const onImageTaken = (value, size) => {
     setImage([value, size]);
   };
 
+  const onOpen = () => {
+    modalizeRef.current?.open();
+  };
+
+  const onDeleteHandler = () => {
+    return {};
+  };
+
+
   const listOfPostTitles = ['#Post1', '#Post2', '#Post3', '#Post4'];
   const listOfFavs = ['#fav1', '#fav2', '#fav3', '#fav4'];
+
+  // const loadpost = async() => {
+  //   const posts =  await postActions.getPost()
+  //   setPosts(post);
+  // }
+
+  useEffect(() => {
+    dispatch(postActions.getProfile());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(postActions.getAllPost());
+  }, [dispatch]);
+
+  const userdetails = useSelector(state => state.post.userdetails);
+  const userName = userdetails.user.username;
+  const categories = userdetails.category;
+  const savedPosts = userdetails.saved_posts;
+  const userPosts = useSelector(state => state.post.posts.filter(post => 
+    post.author === userName));
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
@@ -32,7 +72,7 @@ const ProfileScreen = () => {
             height: 60,
             paddingHorizontal: 12,
           }}
-          title="arjun@gmail.com"
+          title={userName}
           titleStyle={{
             color: colors.white,
             fontFamily: "regular",
@@ -46,9 +86,7 @@ const ProfileScreen = () => {
             {image.length === 0 ? (
               <Image
                 fadeDuration={1000}
-                source={{
-                  uri: "https://is3-ssl.mzstatic.com/image/thumb/Music128/v4/93/f4/03/93f403d8-b07c-a1e6-1cc0-2239f74ce37a/artwork.jpg/400x400cc.jpg",
-                }}
+                source={require("../../../assets/default_DP.jpg")}
                 resizeMode="contain"
                 style={styles.image}
               />
@@ -62,14 +100,14 @@ const ProfileScreen = () => {
             )}
           </View>
           <View style={styles.posts}>
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.num}>12</Text>
+            <TouchableOpacity>
+              <Text style={styles.num}>{userPosts.length.toString()}</Text>
               <Text style={styles.texts}>Posts</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.posts}>
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.num}>6</Text>
+            <TouchableOpacity>
+              <Text style={styles.num}>{categories.length.toString()}</Text>
               <Text style={styles.texts}>Categories</Text>
             </TouchableOpacity>
           </View>
@@ -118,24 +156,41 @@ const ProfileScreen = () => {
 
           <View style={{ flexDirection: "column" }}>
             <FlatList
-              data={select === "posts" ? listOfPostTitles : listOfFavs}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => {
+              data={select === "posts" ? userPosts : savedPosts}
+              keyExtractor={(item) => item.id}
+              renderItem={( itemData ) => {
                 return (
-                  <TopicCard
-                    item={item}
-                    style={styles.card}
-                    onSelect={() => {}}
-                  />
+                  <EditPostCard
+                    title={itemData.item.title}
+                    onClick={() => {
+                      props.navigation.navigate("DetailScreen");
+                    }}
+                  >
+                    <TouchableOpacity onPress={select==="posts"?onOpen:onDeleteHandler}>
+                      {select === "posts" ?
+                      <AntDesign name="edit" size={30} color="#ffffff" />
+                      : <AntDesign name="delete" size={30} color="#ffffff" />
+                      }
+                    </TouchableOpacity>
+                  </EditPostCard>
                 );
               }}
             />
           </View>
         </View>
       </ScrollView>
+      <Modalize
+        modalStyle={{ backgroundColor: colors.modal }}
+        modalHeight={height * 0.9}
+        ref={modalizeRef}
+        handlePosition={"inside"}
+      >
+        <CreatePost />
+      </Modalize>
     </SafeAreaView>
   );
-}
+};
+
 
 const styles = StyleSheet.create({
   imageContainer: {
