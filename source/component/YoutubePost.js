@@ -8,13 +8,25 @@ import { MarkdownView } from "react-native-markdown-view";
 import { useNavigation } from '@react-navigation/core';
 const {width, height} = Dimensions.get('window')
 
-const YoutubePost = ({index,contentSmall,data,onSelect,onHold,onHoldOut,holdModal}) => {
+const YoutubePost = ({index,contentSmall,data,onSelect,onHold,onHoldOut,holdModal,images}) => {
   const[myTag,setMyTag] = useState('');
   const[myPostType,setMyPostType] = useState();
+  
 
   useEffect(()=>{
     findPT(data.tags);
   },[])
+
+    function strToInt(str, arrLen) {
+      const charArr = str.split("");
+      let total = 0;
+      const codeArr = charArr.forEach((char) => {
+        total += char.charCodeAt(0);
+      });
+      const uniqueNum = parseInt(total % arrLen);
+      console.log(uniqueNum);
+      return uniqueNum;
+    }
 
   function capitalizeFirstLetter(string) {
     let text
@@ -191,7 +203,13 @@ const YoutubePost = ({index,contentSmall,data,onSelect,onHold,onHoldOut,holdModa
     const renderUserInfo = () => (
       <View style={{justifyContent:'space-between', flexDirection:'row',width:'100%',marginBottom:5}}>
         <View style={{ flexDirection:'row', borderTopRightRadius:16, borderTopLeftRadius:16}}>
-            <Image source={{uri:dummyProfilePic}} style={{width:40, height:40, borderRadius:40}} />
+          <View style={{justifyContent:'center',alignContent:'center'}}>
+            <Image source={{uri:images ? data.author? images.file[strToInt(data.author, data.author.length)]: null: null}} 
+            style={{width:40, height:40, borderRadius:40}} />
+            <Text style={{position:'absolute',alignSelf:'center',fontSize:20,color:'#ffffff',textAlign:'center',top:5}}>{data.author.charAt(0).toUpperCase()}</Text>
+          </View>
+
+            
             <View style={{marginLeft:12, alignSelf:'center'}}>
                 <Text numberOfLines={contentSmall? 1:null} style={{fontFamily:'medium', fontSize:contentSmall?13: 16, color:'white'}}>{data.author}</Text>
                 
@@ -275,7 +293,7 @@ const YoutubePost = ({index,contentSmall,data,onSelect,onHold,onHoldOut,holdModa
       </View>
     )
     return(
-        <TouchableWithoutFeedback  onLongPress={() => contentSmall? onHoldPost(data):null} onPressOut = {onHoldOut} onPress={() =>contentSmall? onAddToCollection(data.id):navigation.navigate('DetailScreen')}
+        <TouchableWithoutFeedback  onLongPress={() => contentSmall? onHoldPost(data):null} onPressOut = {onHoldOut} onPress={() =>contentSmall? onAddToCollection(data.id):navigation.navigate('DetailScreen',{post_details:data,myTag:myTag,myPostType:myPostType,images:images})}
         
          style={[{width:contentSmall?width*0.44: width*0.94, borderRadius:16, backgroundColor: selected?colors.primaryDark:'#192026', padding:12, alignSelf:'center', marginVertical:8 , 
                   marginHorizontal:contentSmall? width*0.017:null,borderColor:holdModal?colors.primaryLight:null,borderWidth:holdModal?1:null}]}>

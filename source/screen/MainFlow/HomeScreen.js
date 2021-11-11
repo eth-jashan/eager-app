@@ -25,6 +25,16 @@ const{width,height} = Dimensions.get('window')
 
 const HomeScreen = ({navigation}) => {
   const [posts,setPosts] = useState();
+  const [Images, setImages] = useState();
+  const [loader, setLoader] = useState(false);
+
+      const loadImages = async () => {
+        console.log("yooo");
+        setLoader(true);
+        const response = await postActions.loadStaticImages();
+        setImages(response);
+        console.log(response);
+      };
 
   const loadpost = async() => {
     const post =  await postActions.getPost()
@@ -34,6 +44,7 @@ const HomeScreen = ({navigation}) => {
   useEffect(()=>{
     const start = navigation.addListener('focus', () => {
       loadpost()
+      loadImages()
     });
 
     return start;
@@ -84,6 +95,7 @@ const HomeScreen = ({navigation}) => {
                 index={index.toString()}
                 onSelect={onSelect}
                 holdModal={false}
+                images={Images}
               />
             )}
           />

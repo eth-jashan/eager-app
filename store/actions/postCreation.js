@@ -1,13 +1,19 @@
 import { apiUtils } from "../../source/Constants/api";
 import firebase from "../../firebase";
+import { useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const CREATE_POST = "CREATE_POST";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_ALL_POST = "GET_ALL_POST";
 export const CHOOSE_CATEGORY = "CHOOSE_CATEGORY";
+export const GET_PROFILE_DETAILS = "GET_PROFILE_DETAILS";
+
 
 const auth_key =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NzIzMTc1LCJqdGkiOiI3NzgyNTNjYzAyYWI0ZmJiODBhMTAwOTNjZTlhMzlmOCIsInVzZXJfaWQiOjIyfQ.cm9diuIkxWvOJuhINx8bSyW5YfIyoJBP0PNEuN0pjvo";
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NzUwNzY5LCJqdGkiOiJjZWMzZjE2NDRjZjY0OGNkYTNlYWJhZjNlODg0OGQ3YiIsInVzZXJfaWQiOjMyfQ.kFxeQ2MFG0OKqtlY8cQJFXZSYkHkZ9ErG_q0n6bax5Q";
+
+
 
 const uuidv4 = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -137,17 +143,48 @@ export const createPost = (post) => {
 };
 
 export const getPost = async () => {
-  const response = await fetch(
-    `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: auth_key,
-      },
-    }
-  );
-  const resData = await response.json();
-  return resData;
+    const response = await fetch(
+      `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: auth_key,
+        },
+      }
+    );
+    const resData = await response.json();
+    return resData;
+};
+
+export const getUserPost = async(username) => {
+      const response = await fetch(
+        `${apiUtils.baseUrl}/learnapp/post/list?username=${username}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: auth_key,
+          },
+        }
+      );
+      const resData = await response.json();
+      return resData;
+}
+
+export const getAllPost = async() => {
+    const response = await fetch(
+      `${apiUtils.baseUrl}/learnapp/post/list`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: auth_key,
+        },
+      }
+    );
+    const resData = await response.json();
+    return resData;
+
+  
 };
 
 export const chooseCategory = (user_category) => {
@@ -163,7 +200,6 @@ export const chooseCategory = (user_category) => {
       }),
     });
     const resData = await response.json();
-    console.log(resData);
     dispatch({ type: CHOOSE_CATEGORY });
   };
 };
@@ -185,9 +221,6 @@ export const createCollection = async (title, description, idArray) => {
     }
   );
   const resData = await response.json();
-  if(resData.errors){
-    throw new Error(resData.errors[0])
-  }
   return resData;
 };
 
@@ -216,6 +249,7 @@ export const getCollections = async () => {
 };
 
 export const loadStaticImages = async () => {
+  console.log("working");
   try {
     const response = await fetch(`${apiUtils.baseUrl}/learnapp/file/?type=backgrounds`, {
       method: "GET",
@@ -230,30 +264,52 @@ export const loadStaticImages = async () => {
   }
 };
 
-export const detailedCollection = async(id) => {
-  try{
-      const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/${id}/detail`, {
-      method: "GET",
-      headers: {
-        Authorization: auth_key,
-      },
-    });
+export const deleteCollection = async (id) => {
+  try {
+    const response = await fetch(
+      `${apiUtils.baseUrl}/learnapp/collection/${id}/delete/`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: auth_key,
+        },
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const detailedCollection = async (id) => {
+  try {
+    const response = await fetch(
+      `${apiUtils.baseUrl}/learnapp/collection/${id}/detail`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: auth_key,
+        },
+      }
+    );
     const resData = await response.json();
     return resData;
-  }catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
   }
-}
+};
 
-export const deleteCollection = async(id) => {
-  try{
-      const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/${id}/delete/`, {
-      method: "DELETE",
-      headers: {
-        Authorization: auth_key,
-      },
-    });
-  }catch(err){
-    console.log(err)
-  }
-}
+export const save_post = async (postId) => {
+  console.log('yooo',postId)
+  const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: auth_key,
+    },
+    body: JSON.stringify({
+      saved_posts: [postId],
+      type: "post_add",
+    }),
+  });
+  const resData = await response.json();
+  return resData;
+};
