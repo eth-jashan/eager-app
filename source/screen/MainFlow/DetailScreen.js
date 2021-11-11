@@ -7,6 +7,7 @@ import LinkPreview from "react-native-link-preview";
 //icons
 import { Ionicons } from "@expo/vector-icons";
 import { Modalize } from "react-native-modalize";
+import { Fontisto } from "@expo/vector-icons"; 
 
 //components
 import CreatePost from "../../component/CreatePost";
@@ -16,8 +17,28 @@ import HeaderComponent from "../../component/HeaderComponent";
 import { AntDesign, Entypo ,Foundation, MaterialCommunityIcons, FontAwesome , FontAwesome5} from '@expo/vector-icons';
 import { MarkdownView } from "react-native-markdown-view";
 import WebView from "react-native-webview";
+import { save_post } from "../../../store/actions/postCreation";
 
-const DetailScreenc = ({navigation}) => {
+const DetailScreenc = ({navigation,route}) => {
+
+  const saveThisPost = async() => {
+    console.log('heyy')
+    const response = await save_post(post_details.id);
+  }
+
+      function strToInt(str, arrLen) {
+        const charArr = str.split("");
+        let total = 0;
+        const codeArr = charArr.forEach((char) => {
+          total += char.charCodeAt(0);
+        });
+        const uniqueNum = parseInt(total % arrLen);
+        console.log(uniqueNum);
+        return uniqueNum;
+      }
+
+  const { post_details, myTag, myPostType,images } = route.params;
+  console.log('postssssssss', post_details , myPostType ,myTag)
 
 const{width,height} = Dimensions.get('window')
 const modalizeRef = useRef(null);
@@ -25,8 +46,8 @@ const [link, setLink] = useState();
 const [type, setType] = useState();
 
 const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/learn-press-profile/4/172522ec1028ab781d9dfd17eaca4427.jpg'
-    const dummyProfileName = 'Jashan Shetty'
-    const dummyDescription = "What does the 2nd line actually mean ? ``````data={this.state.data} {\n} keyExtractor={(x,i)=>i}``````";
+    const dummyProfileName = post_details.author;
+    const dummyDescription = post_details.description;
     const textLimit = 100
     const postLink = [{type:'YoutubeLink', link:'https://www.youtube.com/watch?v=Qqx_wzMmFeA', meta:{
       "contentType": "text/html; charset=utf-8",
@@ -66,6 +87,7 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
   ]
     const [linkTypeStatus, setLinkTypeStatus] = useState([])
     const [liked, setLiked] = useState(false)
+    const [likes,setLikes] = useState(0);
     
     const linkCheck = async() => {
       // for (let i =0; i< postLink.length; i++){
@@ -150,13 +172,17 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
     const renderUserInfo = () => (
       <View style={{justifyContent:'space-between', flexDirection:'row',width:'100%', padding:12, backgroundColor:colors.secondaryBlack}}>
         <View style={{ flexDirection:'row', borderTopRightRadius:16, borderTopLeftRadius:16}}>
-            <Image source={{uri:dummyProfilePic}} style={{width:40, height:40, borderRadius:40}} />
+          <View>
+            <Image source={{uri:images ? post_details.author? images.file[strToInt(post_details.author, post_details.author.length)]: null: null}} style={{width:40, height:40, borderRadius:40}} />
+            <Text style={{position:'absolute',alignSelf:'center',fontSize:20,color:'#ffffff',textAlign:'center',top:5}}>{post_details.author.charAt(0).toUpperCase()}</Text>
+          </View>
+            
             <View style={{marginLeft:12, alignSelf:'center'}}>
                 <Text style={{fontFamily:'medium', fontSize:16, color:'white'}}>{dummyProfileName}</Text>
                 
-                  <View style={{flexDirection:'row'}}>
-                      {postType[2].icon()}
-                      <Text style={{fontFamily:'light', color:'white', marginLeft:4}}>{postType[2].value}</Text>
+                  <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                      {myPostType?<AntDesign name={myPostType[1]} size={12} color="white" />:null}
+                      {myPostType?<Text style={{fontFamily:'light', color:'white', marginLeft:4}}>{myPostType[0]}</Text>:null}
                   </View>
             </View>
         </View>
@@ -193,7 +219,8 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
     }
     const linkMeta = () => (
       <View>
-        <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{postLink.length} links 🔗 attatched </Text>
+        {/* <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{post_details.resources.length} {post_details.resources.length>1?'links':'link'} 🔗 attatched </Text> */}
+         <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>2 links 🔗 attatched </Text>
         <FlatList 
           data={postLink} 
           horizontal
@@ -203,25 +230,46 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
       </View>
     )
     const singleCategory = (item) => {
-      return(
-        <View style={{margin:6, padding:6, flexDirection:'row', backgroundColor:colors.primary, borderRadius:20}}>
-          {item.icon()}
-          <Text style={{alignSelf:'center', marginLeft:4, color:'white',fontFamily:'light'}}>{item.value}</Text>
+      return (
+        <View
+          style={{
+            margin: 6,
+            padding: 6,
+            flexDirection: "row",
+            backgroundColor: colors.primary,
+            borderRadius: 20,
+          }}
+        >
+          {/* {postType[1].icon()} */}
+          <Text
+            style={{
+              alignSelf: "center",
+              marginLeft: 4,
+              color: "white",
+              fontFamily: "light",
+            }}
+          >
+            {item}
+          </Text>
         </View>
-      )
-    }
+      );
+    };
     const renderCategory = () => (
-      <View style={{marginBottom:8}}>
+      <View style={{ marginBottom: 8 }}>
         {/* <Text style={{fontFamily:'light', color:colors.primary, marginLeft:6}}>{categoryType.length} categories selected </Text> */}
-        <FlatList horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{marginVertical:6}} data={categoryType} keyExtractor={(_, i)=>i.toString()}
-          renderItem={({item, index})=>(singleCategory(item))} />
+        <FlatList
+          horizontal
+          data={myTag}
+          keyExtractor={(_, i) => i.toString()}
+          renderItem={({ item, index }) => singleCategory(item)}
+        />
       </View>
-    )
+    );
     const renderReaction = () => (
       <View style={{flexDirection:'row', justifyContent:'space-between'}}>
         <View style={{flexDirection:'row', margin:6}}>
-          <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:liked?colors.primary:'white'}}>25</Text>
-          <Entypo onPress={()=>setLiked(!liked)} name="arrow-bold-up" size={20} color={liked?colors.primary:"white"} />
+          <Text style={{fontFamily:'medium', fontSize:16,alignSelf:'center', color:liked?colors.primary:'white'}}>{likes}</Text>
+          <Entypo onPress={()=>{setLiked(!liked),setLikes(likes+1)}} name="arrow-bold-up" size={20} color={liked?colors.primary:"white"} />
         </View>
         <View style={{flexDirection:'row', margin:6}}>
             <Entypo name="arrow-bold-down" size={20} color={"white"} />
@@ -231,21 +279,30 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
           <FontAwesome5 onPress={()=>navigation.navigate('CommentScreen')}  style={{marginLeft:4}} name="comment" size={20} color="white" />
         </View>
         <View style={{flexDirection:'row', margin:6}}>
-        <AntDesign  name="sharealt" size={24} color="white" />
+        <Fontisto onPress={() => saveThisPost()}  name="favorite" size={24} color="white" />
         </View>
       </View>
     )
     const renderImage = () => (
-      <View style={{width:width*0.98, alignSelf:'center'}}>
-        <Image resizeMode='cover' source={{uri:'https://i.pinimg.com/originals/c5/51/8c/c5518ce985fbbb402c67dd53faef7972.jpg'}} style={{width:'100%', height:width*0.8 }} />
+      <View style={{ width: width * 0.98, alignSelf: "center" }}>
+        <Image
+          resizeMode="cover"
+          source={{ uri: post_details.image }}
+          style={{
+            height: height * 0.2,
+            width: width * 0.85,
+            alignSelf: "center",
+            borderRadius: 6,
+          }}
+        />
       </View>
-    )
+    );
     
     const renderContent = () => {
       return(
-        <View style={{padding:8, marginBottom:100}}>
-        <Text style={{paddingLeft:8,paddingRight:8, fontFamily:'medium', fontWeight:'bold', fontSize:20, color:'white', marginBottom:12}}>{"React Native: FlatList keyExtractor & toString() Issue?"}</Text>
-        {renderImage()}
+        <View style={{padding:8}}>
+        <Text style={{paddingLeft:8,paddingRight:8, fontFamily:'medium', fontWeight:'bold', fontSize:20, color:'white', marginBottom:12}}>{post_details.title}</Text>
+        {post_details.image? renderImage():null}
         {renderDescription()}
         {linkMeta()}
         </View>
@@ -254,7 +311,7 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
 
     const renderHeader = () => {
       return(
-        <HeaderComponent headerStyles={{borderBottomWidth:0.2, backgroundColor:colors.secondary, padding:12}} leftIcon={()=>(<AntDesign name="arrowleft" size={24} color={colors.primaryDark} />)} />
+        <HeaderComponent headerStyles={{backgroundColor:colors.secondary, padding:12}} leftIcon={()=>(<AntDesign name="arrowleft" size={24} color={colors.primaryDark} />)} />
       )
     }
 
@@ -265,7 +322,7 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
 
 
   return (
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={{flex:1,backgroundColor:colors.secondary}}>
       <FlatList keyExtractor={(_,i)=>i.toString()} contentContainerStyle={{ backgroundColor: colors.secondary }} data={detailBlocks} renderItem={({item, index})=>item.item} />
 
         <View style={{position:'absolute', bottom: 20, width:'90%', padding:12, backgroundColor:colors.secondaryBlack, alignSelf:'center', borderRadius:18}}>

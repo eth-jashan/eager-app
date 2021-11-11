@@ -49,6 +49,7 @@ const CollectionScreen = ({navigation}) => {
     const loadProfile = async () => {
       const profileData = await getProfile();
       const collectionsData = await getCollections();
+      console.log('heeeeeeyyyyyyyyyyy',collectionsData)
       setSavedPost(profileData.saved_posts);
       setCollections(collectionsData);
       setLoader(false);
@@ -66,6 +67,7 @@ const CollectionScreen = ({navigation}) => {
     }, [navigation]);
 
   const onOpen = async(type,item,itemId) => {
+    console.log(type, item, itemId);
     setViewLoader(true);
     if(type === 'view'){
       setviewDis(item.description)
@@ -173,7 +175,7 @@ const CollectionScreen = ({navigation}) => {
         handlePosition={"inside"}
       >
         <CreateCollection type = {type} viewTitle = {viewTitle} viewDis = {viewDis} viewPost = {viewPost} 
-                          saved_posts={savedPost} onClose={onClose} />
+                          saved_posts={savedPost} onClose={onClose} images={Images} />
       </Modalize>
     </ScrollView>
   );

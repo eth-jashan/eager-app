@@ -210,6 +210,7 @@ const CreateCollection = (props) => {
               onHold={onHold}
               onHoldOut={onHoldOut}
               holdModal={false}
+              images = {props.images}
             />
           )}
         />
@@ -243,6 +244,7 @@ const CreateCollection = (props) => {
             holdModal={true}
             contentSmall={false}
             data={previewData}
+            images = {props.images}
           />
         ) : null}
       </Modal>
