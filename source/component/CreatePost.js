@@ -42,7 +42,7 @@ import MarkDownStyles from "./Styles/MarkDownStyles";
 
 const { width, height } = Dimensions.get("window");
 
-const CreatePost = () => {
+const CreatePost = (props) => {
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
@@ -104,6 +104,7 @@ const CreatePost = () => {
         await dispatch(postCreation.getCategory(category));
         await dispatch(postCreation.createPost(post));
         setPostLoader(false);
+        props.closeModal()
         console.log("CLOSE THE MODAL BY SENDING PROPS TO HOMESCREEN");
       } catch (err) {
         setPostLoader(false);

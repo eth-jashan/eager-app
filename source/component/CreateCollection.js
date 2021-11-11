@@ -14,16 +14,19 @@ import { colors } from "../Constants/theme";
 import CreatePostStyles from "./Styles/CreatePostStyles";
 import YoutubePost from "./YoutubePost";
 import { Modal } from "react-native-paper";
+import { MaterialIcons } from "@expo/vector-icons";
 
 //actions
 import { createCollection } from "../../store/actions/postCreation";
 import { getCollections } from "../../store/actions/postCreation";
+import { deleteCollection } from "../../store/actions/postCreation";
 
 
 const { width, height } = Dimensions.get("window");
 
 
 const CreateCollection = (props) => {
+  const [error, setError] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [titleBorder, setTitleBorder] = useState("black");
@@ -32,11 +35,20 @@ const CreateCollection = (props) => {
   const [postLoader, setPostLoader] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [previewData,setPreviewData] = useState();
+  const [deleteLoader, setDeleteLoader] = useState(false);
 
   const closeModal = () => {
     props.onClose();
     console.log(selectedPost);
   };
+
+  const onDelete = async(id) => {
+    setDeleteLoader(true)
+    console.log('delete',id)
+    await deleteCollection(id)
+    setDeleteLoader(false)
+    closeModal();
+  }
 
   const onHold = (data) => {
     setIsPreview(true)
@@ -48,7 +60,8 @@ const CreateCollection = (props) => {
   }
 
   const createCollections = async () => {
-    if (
+    setPostLoader(true)
+    try{    if (
       title.trim().length > 0 &&
       description.trim().length > 0 &&
       selectedPost.length !== 0
@@ -68,7 +81,15 @@ const CreateCollection = (props) => {
           { text: "OK" },
         ]);
       }
+    }}catch(err){
+      setError(err.message)
+              Alert.alert(
+                "Error",
+                err.message,
+                [{ text: "Okay" }]
+              );
     }
+    setPostLoader(false);
   };
 
   const onSelect = (id) => {
@@ -86,80 +107,103 @@ const CreateCollection = (props) => {
 
   return (
     <View style={{ padding: 10 }}>
-      <Text
-        style={{
-          ...CreatePostStyles.heading,
-          alignSelf: "center",
-          paddingTop: 10,
-          fontSize: 18,
-        }}
-      >
-        New Collection
-      </Text>
-      <View>
-        <Text style={{ ...CreatePostStyles.label, paddingLeft: 8 }}>
-          Title *
-        </Text>
-        <TextInput
-          onFocus={() => setTitleBorder(colors.tertiary)}
-          onBlur={() => {
-            setTitleBorder("black");
-          }}
-          value={title}
-          keyboardType="default"
-          onChangeText={setTitle}
-          style={{
-            ...CreatePostStyles.textInput,
-            borderWidth: 1,
-            borderColor: titleBorder,
-            alignSelf: "center",
-          }}
-        />
-      </View>
-      <View>
-        <Text style={{ ...CreatePostStyles.label, paddingLeft: 8 }}>
-          Description *
-        </Text>
-        <TextInput
-          onFocus={() => setDesBorder(colors.tertiary)}
-          onBlur={() => {
-            setDesBorder("black");
-          }}
-          maxLength={66}
-          value={description}
-          keyboardType="default"
-          onChangeText={setDescription}
-          multiline={true}
-          numberOfLines={10}
-          style={{
-            ...CreatePostStyles.descriptionTextInput,
-            borderWidth: 1,
-            borderColor: desBorder,
-            alignSelf: "center",
-            height: height * 0.1,
-          }}
-        />
-      </View>
-      <View>
+      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
         <Text
           style={{
             ...CreatePostStyles.heading,
             alignSelf: "center",
             paddingTop: 10,
             fontSize: 18,
+            width:props.viewTitle? 300 : null
           }}
         >
-          Choose the posts
+          {props.viewTitle ? props.viewTitle : "New Collection"}
         </Text>
+        {props.type === 'view' ? deleteLoader? <ActivityIndicator
+        style={{alignSelf: "center",marginLeft:width*0.062}}
+        size='small'
+        color={'#e04c4c'}
+      />:<MaterialIcons style={{alignSelf:'center',marginLeft:width*0.05,elevation:5}} 
+          name="delete" size={24} color='#e04c4c' onPress={() => onDelete(props.viewPost.id)}/>:null}
+
+      </View>
+
+      {!props.viewTitle ? (
+        <View>
+          <Text style={{ ...CreatePostStyles.label, paddingLeft: 8 }}>
+            Title *
+          </Text>
+          <TextInput
+            onFocus={() => setTitleBorder(colors.tertiary)}
+            onBlur={() => {
+              setTitleBorder("black");
+            }}
+            value={props.viewTitle ? props.viewTitle : title}
+            keyboardType="default"
+            onChangeText={setTitle}
+            style={{
+              ...CreatePostStyles.textInput,
+              borderWidth: 1,
+              borderColor: titleBorder,
+              alignSelf: "center",
+            }}
+          />
+        </View>
+      ) : null}
+      <View>
+        <Text
+          style={{
+            ...CreatePostStyles.label,
+            paddingLeft: 8,
+            fontWeight: props.viewDis ? "normal" : null,
+          }}
+        >
+          {props.viewDis ? props.viewDis : "Description *"}
+        </Text>
+        {!props.viewTitle ? (
+          <TextInput
+            onFocus={() => setDesBorder(colors.tertiary)}
+            onBlur={() => {
+              setDesBorder("black");
+            }}
+            maxLength={66}
+            value={props.viewDis ? props.viewDis : description}
+            keyboardType="default"
+            onChangeText={setDescription}
+            multiline={true}
+            numberOfLines={10}
+            style={{
+              ...CreatePostStyles.descriptionTextInput,
+              borderWidth: 1,
+              borderColor: desBorder,
+              alignSelf: "center",
+              height: height * 0.1,
+            }}
+          />
+        ) : null}
+      </View>
+      <View>
+        {props.viewTitle ? null : (
+          <Text
+            style={{
+              ...CreatePostStyles.heading,
+              alignSelf: "center",
+              paddingTop: 10,
+              fontSize: 18,
+            }}
+          >
+            Choose the posts
+          </Text>
+        )}
         <View
-          style={{ height: 0.5, backgroundColor: "#cccccc", margin: 3 }}
+          style={{ height: 0.5, backgroundColor: "#cccccc", margin: 3 , marginVertical:props.viewTitle?10:null}}
         ></View>
         <FlatList
-          numColumns={2}
-          data={props.saved_posts}
+          numColumns={props.viewTitle?1: 2}
+          data={props.viewTitle?props.viewPost.posts: props.saved_posts}
           renderItem={({ item, index }) => (
             <YoutubePost
-              contentSmall={true}
+              contentSmall={props.viewTitle?false: true}
               data={item}
               index={index}
               onSelect={onSelect}
@@ -169,7 +213,7 @@ const CreateCollection = (props) => {
             />
           )}
         />
-        <TouchableOpacity
+        {!props.viewTitle?<TouchableOpacity
           style={{
             ...CreatePostStyles.addLink,
             padding: 10,
@@ -188,10 +232,10 @@ const CreateCollection = (props) => {
             <ActivityIndicator size="small" color={colors.primaryLight} />
           ) : (
             <Text style={{ color: colors.primaryLight, fontWeight: "bold" }}>
-              Create Collection
+              {"Create Collection"}
             </Text>
           )}
-        </TouchableOpacity>
+        </TouchableOpacity>:null}
       </View>
       <Modal visible={isPreview}>
         {previewData ? (

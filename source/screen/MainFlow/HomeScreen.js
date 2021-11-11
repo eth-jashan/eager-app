@@ -51,6 +51,11 @@ const HomeScreen = ({navigation}) => {
     console.log('take me senpai to detail')
   }
 
+  const closeModal = () => {
+    modalizeRef.current?.close();
+    loadpost();
+  }
+
 
   const onOpen = async () => {
     modalizeRef.current?.open();
@@ -65,6 +70,7 @@ const HomeScreen = ({navigation}) => {
       position: 1,
     },
   ];
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.secondary }}>
       {posts ? (
@@ -84,7 +90,7 @@ const HomeScreen = ({navigation}) => {
         </View>
       ) : (
         <ActivityIndicator
-          style={{ justifyContent: "center", alignSelf: "center" }}
+          style={{ justifyContent: "center", alignSelf: "center",top:height*0.4 }}
           size="small"
           color={colors.primaryLight}
         />
@@ -99,7 +105,7 @@ const HomeScreen = ({navigation}) => {
         ref={modalizeRef}
         handlePosition={"inside"}
       >
-        <CreatePost />
+        <CreatePost closeModal = {closeModal} />
       </Modalize>
     </SafeAreaView>
   );

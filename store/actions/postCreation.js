@@ -5,10 +5,9 @@ export const CREATE_POST = "CREATE_POST";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const GET_ALL_POST = "GET_ALL_POST";
 export const CHOOSE_CATEGORY = "CHOOSE_CATEGORY";
-export const GET_PROFILE_DETAILS = "GET_PROFILE_DETAILS";
 
 const auth_key =
-  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NzE0NjQwLCJqdGkiOiIzM2JkNmRmMTk1MDA0MGUyOGNlMjNhNzQwM2UzNDI2OCIsInVzZXJfaWQiOjI4fQ.ajTHfVf0u9w9bWDH-xwn54R4slTtSPGfZjvYheaLszs";
+  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NzIzMTc1LCJqdGkiOiI3NzgyNTNjYzAyYWI0ZmJiODBhMTAwOTNjZTlhMzlmOCIsInVzZXJfaWQiOjIyfQ.cm9diuIkxWvOJuhINx8bSyW5YfIyoJBP0PNEuN0pjvo";
 
 const uuidv4 = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -138,35 +137,17 @@ export const createPost = (post) => {
 };
 
 export const getPost = async () => {
-    const response = await fetch(
-      `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: auth_key,
-        },
-      }
-    );
-    const resData = await response.json();
-    return resData;
-};
-
-export const getAllPost = () => {
-  return async (dispatch) => {
-    const response = await fetch(
-      `${apiUtils.baseUrl}/learnapp/post/list`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: auth_key,
-        },
-      }
-    );
-    const resData = await response.json();
-    console.log(resData);
-    dispatch({type: GET_ALL_POST, posts: resData});
-  };
+  const response = await fetch(
+    `${apiUtils.baseUrl}/learnapp/post/list?query=rating`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: auth_key,
+      },
+    }
+  );
+  const resData = await response.json();
+  return resData;
 };
 
 export const chooseCategory = (user_category) => {
@@ -182,6 +163,7 @@ export const chooseCategory = (user_category) => {
       }),
     });
     const resData = await response.json();
+    console.log(resData);
     dispatch({ type: CHOOSE_CATEGORY });
   };
 };
@@ -203,22 +185,22 @@ export const createCollection = async (title, description, idArray) => {
     }
   );
   const resData = await response.json();
+  if(resData.errors){
+    throw new Error(resData.errors[0])
+  }
   return resData;
 };
 
-export const getProfile = () => {
-  return async (dispatch) => {
-    const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: auth_key,
-      },
-    });
-    const resData = await response.json();
-    // console.log(resData);
-    dispatch({type: GET_PROFILE_DETAILS, details:resData});
-  };  
+export const getProfile = async () => {
+  const response = await fetch(`${apiUtils.baseUrl}/accounts/profile/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: auth_key,
+    },
+  });
+  const resData = await response.json();
+  return resData;
 };
 
 export const getCollections = async () => {
@@ -234,18 +216,12 @@ export const getCollections = async () => {
 };
 
 export const loadStaticImages = async () => {
-  console.log("working");
-  const formData = new FormData();
-  formData.append("type", "backgrounds");
-  console.log("FORM", formData);
   try {
-    const response = await fetch(`${apiUtils.baseUrl}/learnapp/file/`, {
-      method: "POST",
+    const response = await fetch(`${apiUtils.baseUrl}/learnapp/file/?type=backgrounds`, {
+      method: "GET",
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: auth_key,
       },
-      body: formData,
     });
     const resData = await response.json();
     return resData;
@@ -253,3 +229,31 @@ export const loadStaticImages = async () => {
     console.log(err);
   }
 };
+
+export const detailedCollection = async(id) => {
+  try{
+      const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/${id}/detail`, {
+      method: "GET",
+      headers: {
+        Authorization: auth_key,
+      },
+    });
+    const resData = await response.json();
+    return resData;
+  }catch(err){
+    console.log(err)
+  }
+}
+
+export const deleteCollection = async(id) => {
+  try{
+      const response = await fetch(`${apiUtils.baseUrl}/learnapp/collection/${id}/delete/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: auth_key,
+      },
+    });
+  }catch(err){
+    console.log(err)
+  }
+}
