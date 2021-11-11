@@ -15,6 +15,17 @@ const SearchScreen = () => {
     const [list, setList] = useState([])
     const [tags, setTags] = useState('title')
     const focused = useIsFocused()
+
+      const [Images, setImages] = useState();
+      const [loader, setLoader] = useState(false);
+
+      const loadImages = async () => {
+        console.log("yooo");
+        setLoader(true);
+        const response = await postActions.loadStaticImages();
+        setImages(response);
+        console.log(response);
+      };
     
     const loadpost = async() => {
         const post =  await postActions.getPost()
@@ -45,26 +56,29 @@ const SearchScreen = () => {
     useEffect(()=>{
         if(focused){
             loadpost()
+            loadImages();
         }
     },[])
 
     console.log('Postss', post[0]);
 
     const renderList = () => (
-        <View>
-            <FlatList 
-                data={list}
-                contentContainerStyle={{alignSelf:'center'}}
-                renderItem={({item, index})=>(
-                    <YoutubePost
-                    contentSmall={false}
-                    data={item}
-                    index={index}
-                    holdModal={false}
-                    />)} 
+      <View>
+        <FlatList
+          data={list}
+          contentContainerStyle={{ alignSelf: "center" }}
+          renderItem={({ item, index }) => (
+            <YoutubePost
+              contentSmall={false}
+              data={item}
+              index={index}
+              holdModal={false}
+              images={Images}
             />
-        </View>
-    )
+          )}
+        />
+      </View>
+    );
 
     const tagsList = ['title', 'author', 'category']
 

@@ -190,10 +190,12 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
     )
 
     const renderDescription = () => (
-      <MarkdownView style={{ text: "blue" , width:width}}>
-        {dummyDescription}
-      </MarkdownView>
-    )
+      <View style={{alignItems:'center'}}>
+        <MarkdownView style={{ text: "blue", width: width * 0.9 }}>
+          {dummyDescription}
+        </MarkdownView>
+      </View>
+    );
     const onMetaPress = (item) => {
       setLink(item?.link)
       setType(item?.type)
@@ -325,7 +327,7 @@ const dummyProfilePic = 'https://www.vrsiddhartha.ac.in/me/wp-content/uploads/le
       <SafeAreaView style={{flex:1,backgroundColor:colors.secondary}}>
       <FlatList keyExtractor={(_,i)=>i.toString()} contentContainerStyle={{ backgroundColor: colors.secondary }} data={detailBlocks} renderItem={({item, index})=>item.item} />
 
-        <View style={{position:'absolute', bottom: 20, width:'90%', padding:12, backgroundColor:colors.secondaryBlack, alignSelf:'center', borderRadius:18}}>
+        <View style={{position:'absolute', bottom: 20, width:'90%', padding:12, backgroundColor:colors.navBarBackground, alignSelf:'center', borderRadius:18,borderColor:'#1078FC',elevation:7}}>
           {renderReaction()}
       </View>     
 
