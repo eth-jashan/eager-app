@@ -19,6 +19,7 @@ import { colors } from '../Constants/theme';
 import Toast from 'react-native-toast-message';
 import DetailScreenc from '../screen/MainFlow/DetailScreen';
 import CommentScreen from '../screen/MainFlow/CommentScreen';
+import SearchScreen from '../screen/MainFlow/SearchScreen';
 
 const AuthStack = createStackNavigator();
 
@@ -67,6 +68,16 @@ const BottomStack = () => {
             tabBarLabel: "Home",
             tabBarIcon: ({ color }) => (
               <Entypo name="home" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Search"
+          component={SearchScreen}
+          options={{
+            tabBarLabel: "Search",
+            tabBarIcon: ({ color }) => (
+              <Feather name="search" size={24} color={color} />
             ),
           }}
         />
